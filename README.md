@@ -1,3 +1,21 @@
+# Hackathon Pathfinders
+## Members
+- Marc Mahler, 23-726-276
+- Janosch Beck
+- Jarno Bucher
+
+## Challenge Description
+empty
+
+## Solution Description
+empty
+
+## Tech Stack
+empty
+
+
+---
+
 # Hackathon-Template-Repository
 This is the official template repository for the **"Hackathon for Crisis Apps for GaaP"** seminar hackathon. All teams must use this template to create their project repository.
 
@@ -18,20 +36,3 @@ In the `README.md` file cover the following points:
 Before the pitch session put your presentation in the `pitch/` folder.
 
 Happy hacking!
-
----
-
-# Hackathon Pathfinders
-## Members
-- Marc Mahler, 23-726-276
-- Janosch Beck
-- Jarno Bucher
-
-## Challenge Description
-empty
-
-## Solution Description
-empty
-
-## Tech Stack
-empty
