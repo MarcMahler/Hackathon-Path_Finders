@@ -18,3 +18,20 @@ In the `README.md` file cover the following points:
 Before the pitch session put your presentation in the `pitch/` folder.
 
 Happy hacking!
+
+---
+
+# Hackathon Pathfinders
+## Members
+- Marc Mahler, 23-726-276
+- Janosch Beck
+- Jarno Bucher
+
+## Challenge Description
+empty
+
+## Solution Description
+empty
+
+## Tech Stack
+empty
