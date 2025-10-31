@@ -326,10 +326,11 @@ function AppContent() {
       return <GetStarted onCrisisTeamCreated={handleCrisisTeamCreated} />;
     }
 
-    // Show product detail if a product is selected
-    if (selectedProduct) {
+    // Show product detail only if a product is selected and we have a navigation context
+    // This allows switching tabs from the Sidebar (which clears navigationContext) to work
+    if (selectedProduct && navigationContext) {
       const onBack = navigationContext === 'requestDetail' ? handleBackToRequestDetail : handleBackToDatabase;
-      return <ProductDetail item={selectedProduct} onBack={onBack} />;
+      return <ProductDetail item={selectedProduct} onBack={onBack} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} onViewCart={handleViewCart} />;
     }
 
     // Handle warehouse modules
