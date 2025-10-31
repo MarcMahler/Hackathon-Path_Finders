@@ -421,10 +421,6 @@ export function RequestDetail({ request, onBack, onProductClick, onStatusChange 
               <p className="text-sm text-slate-600">Angefragt von</p>
               <p>{request.requestedBy}</p>
             </div>
-            <div>
-              <p className="text-sm text-slate-600">Priorität</p>
-              {getPriorityBadge(request.priority)}
-            </div>
           </div>
         </Card>
 
