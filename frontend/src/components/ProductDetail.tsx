@@ -25,6 +25,7 @@ interface ProductDetailProps {
   onBack: () => void;
   onProductSelect?: (item: InventoryItem) => void;
   onAddToCart?: (items: InventoryItem[]) => void;
+  onViewCart?: () => void;
 }
 
 const productDetails: Record<string, {
