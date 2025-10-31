@@ -6,6 +6,7 @@ import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Search, CheckCircle, XCircle, Clock } from 'lucide-react';
 import { RequestDetail } from './RequestDetail';
+import { useRequests } from '../contexts/RequestContext';
 
 interface Article {
   id: string;
@@ -212,14 +213,19 @@ interface RequestsProps {
 }
 
 export function Requests({ selectedRequest, onRequestSelect, onBack, onProductClick }: RequestsProps) {
-  const [requests, setRequests] = useState(initialRequests);
+  const { getRequestsForChairman, updateRequestStatus } = useRequests();
+  const requests = getRequestsForChairman(); // Get dynamic data instead of hardcoded
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Offen');
 
   const handleStatusChange = (requestId: string, newStatus: string) => {
-    setRequests(requests.map(req => 
-      req.id === requestId ? { ...req, status: newStatus } : req
-    ));
+    // Use the context to update request status
+    updateRequestStatus(
+      requestId, 
+      newStatus as any, // Convert string to proper status type
+      `Status geändert zu: ${newStatus}`,
+      'Krisenstab Leitung' // In real app, this would be the current user
+    );
   };
 
   if (selectedRequest) {

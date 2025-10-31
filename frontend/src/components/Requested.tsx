@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Search, CheckCircle, XCircle, Clock, Filter } from 'lucide-react';
 import { RequestedDetail } from './RequestedDetail';
+import { useRequests } from '../contexts/RequestContext';
 
 interface Article {
   id: string;
@@ -149,14 +150,17 @@ interface RequestedProps {
 }
 
 export function Requested({ selectedRequest, onRequestSelect, onBack }: RequestedProps) {
+  const { getRequestsForEmployee, getRequestCountsByStatus } = useRequests();
+  const requestedItems = getRequestsForEmployee(); // Get dynamic data
+  const requestCounts = getRequestCountsByStatus(); // Get dynamic counts
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   if (selectedRequest) {
     return <RequestedDetail request={selectedRequest} onBack={onBack} />;
   }
 
-  const filteredRequests = mockRequestedItems.filter(item => {
+  const filteredRequests = requestedItems.filter(item => {
     const matchesSearch = item.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.articles.some(article => article.name.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -205,10 +209,10 @@ export function Requested({ selectedRequest, onRequestSelect, onBack }: Requeste
     return diffDays <= 2 && diffDays >= 0;
   };
 
-  const pendingCount = mockRequestedItems.filter(item => item.status === 'Ausstehend').length;
-  const approvedCount = mockRequestedItems.filter(item => item.status === 'Genehmigt').length;
-  const rejectedCount = mockRequestedItems.filter(item => item.status === 'Abgelehnt').length;
-  const partialCount = mockRequestedItems.filter(item => item.status === 'Teilweise genehmigt').length;
+  const pendingCount = requestCounts.pending;
+  const approvedCount = requestCounts.approved;
+  const rejectedCount = requestCounts.rejected;
+  const partialCount = requestCounts.partial;
 
   return (
     <div className="p-8">

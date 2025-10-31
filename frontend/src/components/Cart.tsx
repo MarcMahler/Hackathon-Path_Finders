@@ -4,11 +4,12 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { ArrowLeft, ShoppingCart, Trash2, Send, Bed, Droplet, Utensils, Armchair, Package, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Trash2, Send, Bed, Droplet, Utensils, Armchair, Package, AlertCircle, CheckCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { Textarea } from './ui/textarea';
 import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
+import { useRequests } from '../contexts/RequestContext';
 
 interface InventoryItem {
   id: string;
@@ -34,6 +35,7 @@ interface CartProps {
 }
 
 export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
+  const { addRequest } = useRequests();
   const [cartItems, setCartItems] = useState<CartItem[]>(
     items.map(item => ({ ...item, requestedQuantity: item.requestedQuantity || 1 }))
   );
@@ -41,6 +43,8 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
   const [requestNote, setRequestNote] = useState('');
   const [priority, setPriority] = useState('Mittel');
   const [deadline, setDeadline] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   // Update cartItems when items prop changes
   useEffect(() => {
@@ -73,25 +77,47 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
     onRemoveItem(itemId);
   };
 
-  const handleSubmitRequest = () => {
+  const handleSubmitRequest = async () => {
     // Validate that deadline is set
-    if (!deadline) {
+    if (!deadline || cartItems.length === 0) {
       return;
     }
 
-    // In a real app, this would submit to an API
-    console.log('Submitting request:', {
-      items: cartItems,
-      note: requestNote,
-      priority: priority,
-      deadline: deadline,
-    });
-    setIsSubmitDialogOpen(false);
-    onClearCart();
-    setCartItems([]);
-    setRequestNote('');
-    setPriority('Mittel');
-    setDeadline('');
+    setIsSubmitting(true);
+
+    try {
+      // Create the request using the context
+      const newRequest = addRequest(
+        cartItems, // This will be converted to the proper format by RequestUtils
+        {
+          priority: priority,
+          deadline: deadline,
+          notes: requestNote || 'Anfrage über Warenkorb eingereicht',
+          requestedBy: 'Janosch Beck', // Demo name
+          organisation: 'AOZ', // Demo organization
+        }
+      );
+
+      // Show success state
+      setSubmitSuccess(true);
+      
+      // Clear form after short delay
+      setTimeout(() => {
+        setIsSubmitDialogOpen(false);
+        setSubmitSuccess(false);
+        onClearCart();
+        setCartItems([]);
+        setRequestNote('');
+        setPriority('Mittel');
+        setDeadline('');
+        setIsSubmitting(false);
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error submitting request:', error);
+      setIsSubmitting(false);
+      // In a real app, show error message to user
+    }
   };
 
   return (
@@ -288,13 +314,43 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
               />
             </div>
 
+            {submitSuccess && (
+              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <p className="text-sm text-green-800">
+                  Anfrage erfolgreich eingereicht! Sie wird nun vom Krisenstab überprüft.
+                </p>
+              </div>
+            )}
+
             <div className="flex justify-end gap-2 pt-4">
-              <Button variant="outline" onClick={() => setIsSubmitDialogOpen(false)}>
+              <Button 
+                variant="outline" 
+                onClick={() => setIsSubmitDialogOpen(false)}
+                disabled={isSubmitting || submitSuccess}
+              >
                 Abbrechen
               </Button>
-              <Button onClick={handleSubmitRequest} disabled={!deadline}>
-                <Send className="w-4 h-4 mr-2" />
-                Anfrage senden
+              <Button 
+                onClick={handleSubmitRequest} 
+                disabled={!deadline || isSubmitting || submitSuccess}
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Wird eingereicht...
+                  </>
+                ) : submitSuccess ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Eingereicht!
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Anfrage senden
+                  </>
+                )}
               </Button>
             </div>
           </div>

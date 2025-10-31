@@ -14,6 +14,7 @@ import { DirectMessages } from './components/DirectMessages';
 import { Settings } from './components/Settings';
 import { Maintenance } from './components/Maintenance';
 import { WarehouseOrders } from './components/WarehouseOrders';
+import { RequestProvider, useRequests } from './contexts/RequestContext';
 
 type UserRole = 'Vorsitzender' | 'Mitarbeitender' | 'Lagerverwaltung';
 
@@ -117,7 +118,23 @@ const mockRequests = [
   { id: 'REQ-010', status: 'Offen' },
 ];
 
-export default function App() {
+// Helper function to get default module for each role
+const getDefaultModuleForRole = (role: UserRole): string => {
+  switch (role) {
+    case 'Vorsitzender':
+      return 'requests';
+    case 'Mitarbeitender':
+      return 'database';
+    case 'Lagerverwaltung':
+      return 'warehouse-1-inventory';
+    default:
+      return 'getstarted';
+  }
+};
+
+// Main App component that uses RequestContext
+function AppContent() {
+  const { getOpenRequestsCount } = useRequests();
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [crisisTeam, setCrisisTeam] = useState<CrisisTeam | null>(null);
   const [activeModule, setActiveModule] = useState('getstarted');
@@ -133,21 +150,18 @@ export default function App() {
     const savedCrisisTeam = localStorage.getItem("crisisTeam");
     
     if (savedUserRole) {
-      setUserRole(savedUserRole as UserRole);
+      const userRole = savedUserRole as UserRole;
+      setUserRole(userRole);
+      
+      // Always set the default module for the role, regardless of crisis team
+      const defaultModule = getDefaultModuleForRole(userRole);
+      setActiveModule(defaultModule);
     }
     
     if (savedCrisisTeam) {
       try {
         const parsed = JSON.parse(savedCrisisTeam);
         setCrisisTeam(parsed);
-        // Set initial module based on role
-        if (savedUserRole === 'Vorsitzender') {
-          setActiveModule('requests');
-        } else if (savedUserRole === 'Mitarbeitender') {
-          setActiveModule('database');
-        } else if (savedUserRole === 'Lagerverwaltung') {
-          setActiveModule('warehouse-1-inventory');
-        }
       } catch (error) {
         console.error("Error loading crisis team:", error);
       }
@@ -155,12 +169,16 @@ export default function App() {
   }, []);
 
   const openRequestsCount = useMemo(() => {
-    return mockRequests.filter(req => req.status === 'Offen').length;
-  }, []);
+    return getOpenRequestsCount();
+  }, [getOpenRequestsCount]);
 
   const handleLogin = (role: UserRole) => {
     setUserRole(role);
     localStorage.setItem("userRole", role);
+    
+    // Set default module for the new role
+    const defaultModule = getDefaultModuleForRole(role);
+    setActiveModule(defaultModule);
   };
 
   const handleLogout = () => {
@@ -377,5 +395,14 @@ export default function App() {
         {renderModule()}
       </main>
     </div>
+  );
+}
+
+// Wrapper component with RequestProvider
+export default function App() {
+  return (
+    <RequestProvider>
+      <AppContent />
+    </RequestProvider>
   );
 }
