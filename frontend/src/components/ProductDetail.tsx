@@ -2,8 +2,11 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
-import { ArrowLeft, Package, MapPin, Clock, AlertCircle, CheckCircle, AlertTriangle, Bed, Droplet, Utensils, Armchair } from 'lucide-react';
+import { ArrowLeft, Package, MapPin, Clock, AlertCircle, CheckCircle, AlertTriangle, Bed, Droplet, Utensils, Armchair, ShoppingCart } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
+import { Input } from './ui/input';
+import { useEffect, useState } from 'react';
 
 interface InventoryItem {
   id: string;
@@ -20,6 +23,8 @@ interface InventoryItem {
 interface ProductDetailProps {
   item: InventoryItem;
   onBack: () => void;
+  onProductSelect?: (item: InventoryItem) => void;
+  onAddToCart?: (items: InventoryItem[]) => void;
 }
 
 const productDetails: Record<string, {
@@ -80,6 +85,29 @@ const productDetails: Record<string, {
       date: '20. Oktober 2025',
       inspector: 'L. Müller (Lagerleitung)',
       condition: 'Gut - vereinzelt kleinere Verschmutzungen',
+    },
+  },
+  'Kissen': {
+    description: 'Ergonomische Kopfkissen für Notunterkünfte. Waschbar und allergikerfreundlich. Komprimierbar für platzsparende Lagerung.',
+    specifications: [
+      { label: 'Abmessungen', value: '60 x 40 x 12 cm' },
+      { label: 'Gewicht', value: '650 g' },
+      { label: 'Füllung', value: 'Polyester-Hohlfaser, antiallergisch' },
+      { label: 'Bezug', value: '100% Baumwolle, abnehmbar' },
+      { label: 'Eigenschaften', value: 'Waschbar 60°C, komprimierbar' },
+      { label: 'Verpackung', value: 'Kompressionsbeutel, 20 Stück/Karton' },
+    ],
+    image: '',
+    procurement: {
+      difficulty: 'Einfach',
+      description: 'Standardprodukt für Gemeinschaftsunterkünfte. Gut verfügbar über Textilgroßhändler und spezialisierte Notfall-Ausrüster.',
+      leadTime: '1-2 Wochen',
+      suppliers: 'Textilgroßhandel, Bettwäsche-Hersteller, Katastrophenschutz-Lieferanten',
+    },
+    lastInspection: {
+      date: '22. Oktober 2025',
+      inspector: 'K. Weber (Lagerleitung)',
+      condition: 'Sehr gut - alle Kissen gereinigt und hygienisch verpackt',
     },
   },
   'Decken': {
@@ -304,7 +332,7 @@ const productDetails: Record<string, {
   },
 };
 
-export function ProductDetail({ item, onBack }: ProductDetailProps) {
+export function ProductDetail({ item, onBack, onProductSelect, onAddToCart }: ProductDetailProps) {
   const details = productDetails[item.product] || {
     description: 'Keine detaillierten Informationen verfügbar.',
     specifications: [],
@@ -320,6 +348,74 @@ export function ProductDetail({ item, onBack }: ProductDetailProps) {
       inspector: 'N/A',
       condition: 'N/A',
     },
+  };
+
+  // Sample inventory data to find related products (in real app, this would come from props or context)
+  const sampleInventory: InventoryItem[] = [
+    { id: 'INV-001', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Feldbetten', category: 'Schlafen', available: 250, unit: 'Stück', minStock: 100, lastUpdated: 'vor 2 Std.' },
+    { id: 'INV-002', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Schlafsäcke', category: 'Schlafen', available: 180, unit: 'Stück', minStock: 150, lastUpdated: 'vor 2 Std.' },
+    { id: 'INV-003', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Decken', category: 'Schlafen', available: 320, unit: 'Stück', minStock: 150, lastUpdated: 'vor 3 Std.' },
+    { id: 'INV-004', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Kissen', category: 'Schlafen', available: 280, unit: 'Stück', minStock: 150, lastUpdated: 'vor 3 Std.' },
+    { id: 'INV-005', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Hygieneset', category: 'Hygiene', available: 450, unit: 'Stück', minStock: 200, lastUpdated: 'vor 1 Std.' },
+    { id: 'INV-006', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Windeln', category: 'Hygiene', available: 85, unit: 'Pakete', minStock: 100, lastUpdated: 'vor 3 Std.' },
+  ];
+
+  // Get related products from the same category (excluding current item)
+  const getRelatedProducts = () => {
+    return sampleInventory
+      .filter(product => product.category === item.category && product.id !== item.id)
+      .slice(0, 3); // Limit to 3 related products
+  };
+
+  const relatedProducts = getRelatedProducts();
+
+  // State for order dialog
+  const [orderDialogOpen, setOrderDialogOpen] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+
+  // Smooth scroll to top when component mounts or item changes
+  useEffect(() => {
+    const scrollToTop = () => {
+      // Try to find the main container with overflow-auto
+      const mainContainer = document.querySelector('main.overflow-auto') || 
+                           document.querySelector('main') || 
+                           document.querySelector('.overflow-auto');
+      
+      if (mainContainer) {
+        // Scroll the main container
+        mainContainer.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        // Fallback to window scroll
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+    };
+
+    // Small delay to ensure DOM is ready and give a nice feel
+    const timer = setTimeout(scrollToTop, 150);
+    
+    return () => clearTimeout(timer);
+  }, [item.id]); // Trigger when item ID changes
+
+  const handleOrderClick = () => {
+    setOrderQuantity(1);
+    setOrderDialogOpen(true);
+  };
+
+  const handleOrderSubmit = () => {
+    if (onAddToCart) {
+      // Create a new item with the requested quantity (same as Database.tsx)
+      const itemWithQuantity = { ...item, requestedQuantity: orderQuantity };
+      onAddToCart([itemWithQuantity]);
+    }
+    setOrderDialogOpen(false);
+    // Reset quantity for next order
+    setOrderQuantity(1);
   };
 
   const getCategoryIcon = (category: string) => {
@@ -416,7 +512,7 @@ export function ProductDetail({ item, onBack }: ProductDetailProps) {
         {/* Produktbild */}
         <Card className="lg:col-span-1 p-6">
           <h1 className="mb-4 text-3xl font-bold">{item.product}</h1>
-          <div className="aspect-square rounded-lg overflow-hidden bg-slate-100">
+          <div className="aspect-square rounded-lg overflow-hidden bg-slate-100 mb-4">
             <div className="w-full h-full flex items-center justify-center">
               {(() => {
                 const { icon: CategoryIcon, color } = getCategoryIcon(item.category);
@@ -424,6 +520,16 @@ export function ProductDetail({ item, onBack }: ProductDetailProps) {
               })()}
             </div>
           </div>
+          
+          {/* Bestellen Button */}
+          <Button 
+            size="sm"
+            variant="outline"
+            className="w-full border-blue-500 text-blue-600 hover:bg-blue-50"
+            onClick={handleOrderClick}
+          >
+            Bestellen
+          </Button>
         </Card>
 
         {/* Produktbeschreibung & Spezifikationen */}
@@ -516,7 +622,118 @@ export function ProductDetail({ item, onBack }: ProductDetailProps) {
             </div>
           </div>
         </Card>
+
+        {/* Related Products */}
+        {relatedProducts.length > 0 && (
+          <Card className="lg:col-span-3 p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Package className="w-5 h-5 text-slate-500" />
+              <h2>Verwandte Produkte aus Kategorie "{item.category}"</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {relatedProducts.map((relatedItem) => {
+                const { icon: CategoryIcon, color } = getCategoryIcon(relatedItem.category);
+                const stockStatus = getStockStatus(relatedItem.available, relatedItem.minStock);
+                
+                return (
+                  <div 
+                    key={relatedItem.id} 
+                    className="border border-slate-200 rounded-lg p-4 hover:bg-slate-50 hover:border-blue-300 transition-all cursor-pointer hover:shadow-md"
+                    onClick={() => onProductSelect && onProductSelect(relatedItem)}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <CategoryIcon className={`w-5 h-5 ${color}`} />
+                      <h3 className="font-medium text-slate-900 hover:text-blue-700 transition-colors">{relatedItem.product}</h3>
+                    </div>
+                    
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Verfügbar:</span>
+                        <span className="font-medium">{relatedItem.available} {relatedItem.unit}</span>
+                      </div>
+                      
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Standort:</span>
+                        <span className="text-slate-700">{relatedItem.location}</span>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600">Status:</span>
+                        {getStockBadge(relatedItem.available, relatedItem.minStock)}
+                      </div>
+                      
+                      <div className="pt-2">
+                        <span className="text-xs text-slate-500">
+                          Aktualisiert: {relatedItem.lastUpdated}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-800">
+                💡 <strong>Tipp:</strong> Diese Produkte werden oft zusammen angefordert. 
+                <strong> Klicken Sie auf ein Produkt</strong> für weitere Details oder prüfen Sie deren Verfügbarkeit für eine vollständige Notfallausstattung.
+              </p>
+            </div>
+          </Card>
+        )}
       </div>
+
+      {/* Order Dialog */}
+      <Dialog open={orderDialogOpen} onOpenChange={setOrderDialogOpen}>
+        <DialogContent aria-describedby="order-dialog-description">
+          <DialogHeader>
+            <DialogTitle>Produkt bestellen</DialogTitle>
+            <DialogDescription id="order-dialog-description">
+              Geben Sie die gewünschte Menge ein und fügen Sie das Produkt zum Warenkorb hinzu.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 mt-4">
+            <div className="p-4 bg-slate-50 rounded-lg">
+              <div className="flex items-center gap-2 mb-2">
+                {(() => {
+                  const { icon: CategoryIcon, color } = getCategoryIcon(item.category);
+                  return <CategoryIcon className={`w-5 h-5 ${color}`} />;
+                })()}
+                <span className="font-semibold text-slate-900">{item.product}</span>
+              </div>
+              <p className="text-sm text-slate-600">
+                Lagerstandort: {item.location}
+              </p>
+              <p className="text-sm text-slate-600">
+                Verfügbar: {item.available} {item.unit}
+              </p>
+            </div>
+            <div>
+              <Label>Anzahl</Label>
+              <Input
+                type="number"
+                min="1"
+                max={item.available}
+                value={orderQuantity}
+                onChange={(e) => setOrderQuantity(Math.max(1, Math.min(item.available, parseInt(e.target.value) || 1)))}
+                className="mt-2"
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Max. {item.available} {item.unit} verfügbar
+              </p>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+              <Button variant="outline" onClick={() => setOrderDialogOpen(false)}>
+                Abbrechen
+              </Button>
+              <Button onClick={handleOrderSubmit}>
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Zum Warenkorb
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

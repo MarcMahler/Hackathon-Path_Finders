@@ -329,7 +329,7 @@ function AppContent() {
     // Show product detail if a product is selected
     if (selectedProduct) {
       const onBack = navigationContext === 'requestDetail' ? handleBackToRequestDetail : handleBackToDatabase;
-      return <ProductDetail item={selectedProduct} onBack={onBack} />;
+      return <ProductDetail item={selectedProduct} onBack={onBack} onProductSelect={handleProductSelect} onAddToCart={handleAddToCart} />;
     }
 
     // Handle warehouse modules
