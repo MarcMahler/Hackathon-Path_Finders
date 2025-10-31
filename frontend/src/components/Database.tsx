@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
-import { Plus, Search, Package, MapPin, AlertTriangle, TrendingUp, Bed, Droplet, Utensils, Armchair, ShoppingCart, ArrowLeft, Building2, ChevronRight } from 'lucide-react';
+import { Plus, Search, Package, MapPin, AlertTriangle, TrendingUp, Bed, Droplet, Utensils, Armchair, ShoppingCart, ArrowLeft, Building2, ChevronRight, Loader2, RefreshCw } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { Label } from './ui/label';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
@@ -25,7 +25,8 @@ interface InventoryItem {
   requestedQuantity?: number;
 }
 
-const inventoryData: InventoryItem[] = [
+// Fallback data - used when API is unavailable
+const fallbackInventoryData: InventoryItem[] = [
   // Zürich Hauptlager
   { id: 'INV-001', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Feldbetten', category: 'Schlafen', available: 250, unit: 'Stück', minStock: 100, lastUpdated: 'vor 2 Std.' },
   { id: 'INV-002', location: 'Zürich Hauptlager', address: 'Badenerstrasse 123, 8004 Zürich', product: 'Schlafsäcke', category: 'Schlafen', available: 180, unit: 'Stück', minStock: 150, lastUpdated: 'vor 2 Std.' },
@@ -69,6 +70,29 @@ const inventoryData: InventoryItem[] = [
   { id: 'INV-036', location: 'Altstetten Lager', address: 'Lindenstrasse 23, 8048 Altstetten', product: 'Stuhl', category: 'Möbel', available: 165, unit: 'Stück', minStock: 120, lastUpdated: 'vor 6 Std.' },
 ];
 
+// API configuration
+const API_BASE_URL = 'http://localhost:3001/api';
+
+// API service functions
+const inventoryService = {
+  async fetchInventory(): Promise<InventoryItem[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/inventory`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const result = await response.json();
+      if (result.success && result.data) {
+        return result.data;
+      }
+      throw new Error('Invalid API response format');
+    } catch (error) {
+      console.warn('Failed to fetch inventory from API:', error);
+      throw error;
+    }
+  }
+};
+
 type UserRole = 'Vorsitzender' | 'Mitarbeitender' | 'Lagerverwaltung';
 
 interface DatabaseProps {
@@ -81,6 +105,13 @@ interface DatabaseProps {
 }
 
 export function Database({ onProductSelect, userRole, onViewCart, onAddToCart, cartItemCount = 0, selectedLocation: propSelectedLocation }: DatabaseProps) {
+  // State for data and loading
+  const [inventoryData, setInventoryData] = useState<InventoryItem[]>(fallbackInventoryData);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isApiConnected, setIsApiConnected] = useState(false);
+  const [lastFetch, setLastFetch] = useState<Date | null>(null);
+  
+  // Existing state
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [orderDialogOpen, setOrderDialogOpen] = useState(false);
@@ -91,6 +122,29 @@ export function Database({ onProductSelect, userRole, onViewCart, onAddToCart, c
   const [editProductDialogOpen, setEditProductDialogOpen] = useState(false);
   const [addStockDialogOpen, setAddStockDialogOpen] = useState(false);
   const [addStockQuantity, setAddStockQuantity] = useState(0);
+
+  // Fetch inventory data from API
+  const fetchInventoryData = async () => {
+    setIsLoading(true);
+    try {
+      const data = await inventoryService.fetchInventory();
+      setInventoryData(data);
+      setIsApiConnected(true);
+      setLastFetch(new Date());
+      console.log('✅ Inventory data loaded from API:', data.length, 'items');
+    } catch (error) {
+      console.warn('⚠️ API unavailable, using fallback data:', error);
+      setInventoryData(fallbackInventoryData);
+      setIsApiConnected(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load data on component mount
+  useEffect(() => {
+    fetchInventoryData();
+  }, []);
 
   const filteredInventory = inventoryData.filter(item => {
     const matchesSearch = 
@@ -298,6 +352,34 @@ export function Database({ onProductSelect, userRole, onViewCart, onAddToCart, c
               <p className="text-slate-600">Übersicht aller verfügbaren Produkte und Bestände</p>
             </>
           )}
+          
+          {/* API Status Indicator */}
+          <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${isApiConnected ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+              <span className="text-xs text-slate-500">
+                {isApiConnected ? '🌐 Live-Daten' : '💾 Offline-Modus'}
+              </span>
+            </div>
+            {lastFetch && (
+              <span className="text-xs text-slate-400">
+                Aktualisiert: {lastFetch.toLocaleTimeString()}
+              </span>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={fetchInventoryData}
+              className="h-6 px-2 text-xs"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <RefreshCw className="w-3 h-3" />
+              )}
+            </Button>
+          </div>
         </div>
         {userRole === 'Lagerverwaltung' && (
           <Button 
@@ -309,6 +391,16 @@ export function Database({ onProductSelect, userRole, onViewCart, onAddToCart, c
           </Button>
         )}
       </div>
+
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="flex items-center gap-2">
+            <Loader2 className="w-5 h-5 animate-spin" />
+            <span>Lade Inventardaten...</span>
+          </div>
+        </div>
+      )}
 
       {userRole !== 'Mitarbeitender' && !selectedLocation && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

@@ -218,14 +218,22 @@ export function Requests({ selectedRequest, onRequestSelect, onBack, onProductCl
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Offen');
 
-  const handleStatusChange = (requestId: string, newStatus: string) => {
-    // Use the context to update request status
-    updateRequestStatus(
-      requestId, 
-      newStatus as any, // Convert string to proper status type
-      `Status geändert zu: ${newStatus}`,
-      'Krisenstab Leitung' // In real app, this would be the current user
-    );
+  const handleStatusChange = async (requestId: string, newStatus: string) => {
+    console.log('🔄 Starting request status update:', { requestId, newStatus });
+    
+    try {
+      // Use the context to update request status
+      await updateRequestStatus(
+        requestId, 
+        newStatus as any, // Convert string to proper status type
+        `Status geändert zu: ${newStatus}`,
+        'Krisenstab Leitung' // In real app, this would be the current user
+      );
+      
+      console.log('✅ Request status updated successfully:', { requestId, newStatus });
+    } catch (error) {
+      console.error('❌ Failed to update request status:', error);
+    }
   };
 
   if (selectedRequest) {

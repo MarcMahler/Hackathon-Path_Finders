@@ -101,19 +101,22 @@ export const RequestProvider = ({ children }: RequestProviderProps) => {
   };
 
   // Update request status
-  const updateRequestStatus = (
+  const updateRequestStatus = async (
     requestId: string,
     newStatus: UnifiedRequest['status'],
     comment: string,
     user: string,
     articleUpdates?: { [articleId: string]: { status: any; approvedQuantity?: number } }
   ) => {
+    // Update the request status first
     setRequests(prev => prev.map(request => {
       if (request.id === requestId) {
         return RequestUtils.updateRequestStatus(request, newStatus, comment, user, articleUpdates);
       }
       return request;
     }));
+
+    // Request status updated successfully (inventory updates removed per user request)
   };
 
   // Get specific request by ID
