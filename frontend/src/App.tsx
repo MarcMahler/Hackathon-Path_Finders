@@ -12,6 +12,7 @@ import { ToDos } from './components/ToDos';
 import { History } from './components/History';
 import { DirectMessages } from './components/DirectMessages';
 import { Settings } from './components/Settings';
+import { Support } from './components/Support';
 import { Maintenance } from './components/Maintenance';
 import { WarehouseOrders } from './components/WarehouseOrders';
 import { RequestProvider, useRequests } from './contexts/RequestContext';
@@ -365,6 +366,8 @@ function AppContent() {
         return <Cart items={cartItems} onBack={handleBackFromCart} onRemoveItem={handleRemoveFromCart} onClearCart={handleClearCart} />;
       case 'settings':
         return <Settings crisisTeam={crisisTeam} onUpdate={handleUpdateCrisisTeam} onLeave={handleLeaveCrisisTeam} onBack={() => handleModuleChange('requests')} />;
+      case 'support':
+        return <Support />;
       case 'todos':
         return <ToDos />;
       case 'history':
