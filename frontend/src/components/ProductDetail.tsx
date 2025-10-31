@@ -45,12 +45,12 @@ const productDetails: Record<string, {
       { label: 'Gewicht', value: '8,5 kg' },
       { label: 'Belastbarkeit', value: 'bis 120 kg' },
       { label: 'Material', value: 'Aluminium-Gestell, Polyester-Gewebe' },
-      { label: 'Verpackung', value: 'Tragetasche, 10 Stück/Palette' },
+      { label: 'Verpackung', value: 'Tragetasche, 10 Stück/Palette (Palette EU-Norm 120x80cm)' },
     ],
-    image: '',
+    image: '/bett.png',
     procurement: {
       difficulty: 'Mittel',
-      description: 'Erhältlich über staatliche Beschaffungsstellen und spezialisierte Notfall-Ausrüster. Lieferzeiten können bei großen Mengen mehrere Wochen betragen.',
+      description: 'Abholung: Zürich Hauptlager, Badenerstrasse 123, 8004 Zürich\n\nÖffnungszeiten: Mo-Fr 7:30-17:00, Sa 9:00-12:00\n\nZugänglichkeit: LKW-Zufahrt vorhanden, Laderampe, Gabelstapler verfügbar. Anmeldung 24h im Voraus erforderlich.\n\nKontakt: Thomas Meier, Tel: 044 123 45 67, Email: meier@resilio-zh.ch\n\nHinweis: Palettenweise Ausgabe, Mindestabnahme 1 Palette (10 Stück)',
       leadTime: '2-4 Wochen',
       suppliers: 'Zivilschutz-Beschaffung, Katastrophenschutz Zürich, diverse Online-Händler',
     },
@@ -67,12 +67,12 @@ const productDetails: Record<string, {
       { label: 'Gewicht', value: '1,8 kg' },
       { label: 'Temperaturbereich', value: '-10°C bis +15°C (Komfort)' },
       { label: 'Material', value: 'Polyester-Füllung, Nylon-Außenhülle' },
-      { label: 'Verpackung', value: 'Kompressionsbeutel, 20 Stück/Karton' },
+      { label: 'Verpackung', value: 'Kompressionsbeutel, 20 Stück/Karton (Karton 60x40x40cm)' },
     ],
-    image: '',
+    image: '/schlafsack.png',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Schnell verfügbar über verschiedene Outdoor- und Notfall-Ausrüster. Kurzfristige Beschaffung möglich.',
+      description: 'Abholung: Oerlikon Depot, Schaffhauserstrasse 45, 8050 Oerlikon\n\nÖffnungszeiten: Mo-Fr 8:00-18:00, Sa 10:00-14:00\n\nZugänglichkeit: Begrenzte LKW-Zufahrt (max. 7.5t), enge Zufahrtsstraße. PKW und Transporter problemlos möglich.\n\nKontakt: Sandra Keller, Tel: 044 234 56 78, Email: keller@resilio-zh.ch\n\nHinweis: Selbstabholung bevorzugt, Lieferung bei größeren Mengen nach Absprache möglich',
       leadTime: '3-7 Tage',
       suppliers: 'Outdoor-Fachhändler, Online-Shops, THW-Beschaffung',
     },
@@ -89,12 +89,12 @@ const productDetails: Record<string, {
       { label: 'Gewicht', value: '1,2 kg' },
       { label: 'Material', value: '70% Wolle, 30% Polyester' },
       { label: 'Eigenschaften', value: 'Flammhemmend, waschbar 60°C' },
-      { label: 'Verpackung', value: '20 Stück/Karton' },
+      { label: 'Verpackung', value: '20 Stück/Karton (Karton 80x60x40cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Standardprodukt, das von vielen Lieferanten angeboten wird. Große Mengen kurzfristig verfügbar.',
+      description: 'Abholung: Zürich Hauptlager, Badenerstrasse 123, 8004 Zürich\n\nÖffnungszeiten: Mo-Fr 7:30-17:00, Sa 9:00-12:00\n\nZugänglichkeit: LKW-Zufahrt vorhanden, Laderampe. Großmengen problemlos möglich.\n\nKontakt: Klaus Weber, Tel: 044 123 45 70, Email: weber@resilio-zh.ch\n\nHinweis: Kartonweise Ausgabe, bei Bedarf auch einzelne Decken verfügbar',
       leadTime: '1-2 Wochen',
       suppliers: 'Textilgroßhandel, Katastrophenschutz-Lieferanten',
     },
@@ -111,12 +111,12 @@ const productDetails: Record<string, {
       { label: 'Abmessungen', value: '25 x 15 x 8 cm' },
       { label: 'Gewicht', value: '450 g' },
       { label: 'Material Tasche', value: 'Wasserabweisendes Nylon' },
-      { label: 'Verpackung', value: '50 Stück/Karton' },
+      { label: 'Verpackung', value: '50 Stück/Karton (Karton 60x40x50cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Standardisierte Sets, die von Hilfsorganisationen regelmäßig beschafft werden. Kurzfristige Verfügbarkeit.',
+      description: 'Abholung: Altstetten Lager, Lindenstrasse 23, 8048 Altstetten\n\nÖffnungszeiten: Mo-Fr 9:00-16:00\n\nZugänglichkeit: Keine LKW-Zufahrt, nur PKW/Transporter. Parkplätze direkt vor dem Gebäude.\n\nKontakt: Sarah Fischer, Tel: 044 345 67 89, Email: fischer@resilio-zh.ch\n\nHinweis: Sets sind vorkonfektioniert und versiegelt, keine Einzelentnahme möglich',
       leadTime: '1-2 Wochen',
       suppliers: 'Hygiene-Großhändler, DRK, Malteser',
     },
@@ -133,12 +133,12 @@ const productDetails: Record<string, {
       { label: 'Menge pro Paket', value: '50 Stück' },
       { label: 'Material', value: 'Zellstoff, Superabsorber, Vliesstoff' },
       { label: 'Eigenschaften', value: 'Atmungsaktiv, hautfreundlich, dermatologisch getestet' },
-      { label: 'Verpackung', value: '6 Pakete/Karton' },
+      { label: 'Verpackung', value: '6 Pakete/Karton (Karton 50x40x35cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Massenprodukt mit hoher Verfügbarkeit. Kann über Drogeriemärkte und Großhändler schnell beschafft werden.',
+      description: 'Abholung: Oerlikon Depot, Schaffhauserstrasse 45, 8050 Oerlikon\n\nÖffnungszeiten: Mo-Fr 8:00-18:00, Sa 10:00-14:00\n\nZugänglichkeit: Begrenzte LKW-Zufahrt (max. 7.5t), enge Zufahrtsstraße. Entladung im Hof möglich.\n\nKontakt: Anna Becker, Tel: 044 234 56 80, Email: becker@resilio-zh.ch\n\nHinweis: Kartonweise Ausgabe (6 Pakete), verschiedene Größen auf Anfrage verfügbar',
       leadTime: '3-5 Tage',
       suppliers: 'Drogeriemärkte (dm, Rossmann), Großhändler, Hersteller',
     },
@@ -155,12 +155,12 @@ const productDetails: Record<string, {
       { label: 'Gewicht', value: 'ca. 150 g pro Sandwich' },
       { label: 'Lagerung', value: 'Gekühlt bei 2-7°C' },
       { label: 'Haltbarkeit', value: '3 Tage ab Produktion' },
-      { label: 'Verpackung', value: 'Einzeln verpackt, 12 Stück/Karton' },
+      { label: 'Verpackung', value: 'Einzeln verpackt, 12 Stück/Karton (Karton 40x30x15cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Mittel',
-      description: 'Tägliche Frischlieferung erforderlich. Abhängig von lokalen Bäckereien und Catering-Services. Bei großen Mengen Vorlaufzeit nötig.',
+      description: 'Abholung: Zürich Hauptlager, Badenerstrasse 123, 8004 Zürich (Kühlraum)\n\nÖffnungszeiten: Täglich 6:00-10:00 (Frischware)\n\nZugänglichkeit: LKW-Zufahrt vorhanden, Kühlkette muss gewährleistet sein. Kühlboxen erforderlich.\n\nKontakt: Peter Richter, Tel: 044 123 45 75, Email: richter@resilio-zh.ch\n\nHinweis: Bestellung bis 16:00 Uhr Vortag, Mindestabnahme 12 Stück. Verschiedene Varianten verfügbar.',
       leadTime: '1-2 Tage (täglich)',
       suppliers: 'Lokale Bäckereien, Catering-Services, Großküchen',
     },
@@ -177,12 +177,12 @@ const productDetails: Record<string, {
       { label: 'Typ', value: 'Mineralarm, stilles Wasser' },
       { label: 'Lagerung', value: 'Kühl und trocken, vor Sonnenlicht geschützt' },
       { label: 'Haltbarkeit', value: '12 Monate ab Abfüllung' },
-      { label: 'Verpackung', value: '6 Flaschen/Träger, 72 Flaschen/Palette' },
+      { label: 'Verpackung', value: '6 Flaschen/Träger, 72 Flaschen/Palette (Palette EU-Norm 120x80cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Massenprodukt mit sehr hoher Verfügbarkeit. Großmengen können über Getränkegroßhändler kurzfristig beschafft werden.',
+      description: 'Abholung: Zürich Hauptlager, Badenerstrasse 123, 8004 Zürich\n\nÖffnungszeiten: Mo-Fr 7:30-17:00, Sa 9:00-12:00\n\nZugänglichkeit: LKW-Zufahrt vorhanden, Laderampe. Palettenausgabe mit Gabelstapler.\n\nKontakt: Tanja Klein, Tel: 044 123 45 72, Email: klein@resilio-zh.ch\n\nHinweis: Palettenweise Ausgabe (72 Flaschen), sehr hohe Verfügbarkeit. Bei Großbestellungen (>10 Paletten) 48h Vorlauf.',
       leadTime: '1-3 Tage',
       suppliers: 'Getränkegroßhändler, Supermärkte, Hersteller',
     },
@@ -204,7 +204,7 @@ const productDetails: Record<string, {
     image: '',
     procurement: {
       difficulty: 'Schwierig',
-      description: 'Wohnraum ist in Krisensituationen schwer zu beschaffen. Erfordert Verträge mit Wohnungsbaugesellschaften und privaten Vermietern. Lange Vorlaufzeiten.',
+      description: 'Koordination: Resilio Immobilien-Service, Sihlquai 131, 8005 Zürich\n\nÖffnungszeiten: Mo-Fr 9:00-17:00 (nur nach Terminvereinbarung)\n\nZugänglichkeit: Büro im 3. Stock, kein Aufzug. Wohnungen an verschiedenen Standorten.\n\nKontakt: Robert Hoffmann, Tel: 044 456 78 90, Email: hoffmann@resilio-immobilien.ch\n\nHinweis: Besichtigung erforderlich, Schlüsselübergabe nach Vertragsabschluss. Mindestmietdauer 3 Monate.',
       leadTime: '4-8 Wochen',
       suppliers: 'Städtische Wohnungsbaugesellschaften, Private Vermieter, Landratsamt',
     },
@@ -226,7 +226,7 @@ const productDetails: Record<string, {
     image: '',
     procurement: {
       difficulty: 'Mittel',
-      description: 'Erfordert Zusammenarbeit mit Großküchen und Catering-Services. Bei großen Mengen ist Vorlaufzeit erforderlich.',
+      description: 'Abholung: Altstetten Lager, Lindenstrasse 23, 8048 Altstetten (Ausgabestelle Verpflegung)\n\nÖffnungszeiten: Täglich 11:00-13:00 und 17:00-19:00\n\nZugänglichkeit: Keine LKW-Zufahrt, nur PKW/Transporter. Warmhaltung vor Ort möglich.\n\nKontakt: Maria Schulze, Tel: 044 345 67 92, Email: schulze@resilio-zh.ch\n\nHinweis: Bestellung bis 9:00 Uhr am gleichen Tag, Mindestabnahme 20 Portionen. Eigene Warmhaltebehälter von Vorteil.',
       leadTime: '1 Tag (täglich)',
       suppliers: 'Städtische Großküchen, Catering-Services, Hilfsorganisationen',
     },
@@ -243,12 +243,12 @@ const productDetails: Record<string, {
       { label: 'Aufbau', value: '3-lagig (Vliesstoff)' },
       { label: 'Eigenschaften', value: 'Nasenbügel, elastische Ohrschlaufen' },
       { label: 'Zertifizierung', value: 'CE-zertifiziert nach EN 14683' },
-      { label: 'Verpackung', value: '50 Stück/Box, 2000 Stück/Karton' },
+      { label: 'Verpackung', value: '50 Stück/Box, 2000 Stück/Karton (Karton 60x40x30cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Seit der Pandemie gut verfügbar über medizinische Großhändler. Große Mengen kurzfristig lieferbar.',
+      description: 'Abholung: Zürich Hauptlager, Badenerstrasse 123, 8004 Zürich (Medizinlager)\n\nÖffnungszeiten: Mo-Fr 8:00-17:00\n\nZugänglichkeit: Separater Eingang für medizinische Güter, LKW-Zufahrt vorhanden. Laderampe verfügbar.\n\nKontakt: Dr. Julia Werner, Tel: 044 123 45 85, Email: werner@resilio-zh.ch\n\nHinweis: Kartonweise Ausgabe (2000 Stück), CE-Zertifikat wird mitgeliefert. Sehr hohe Verfügbarkeit.',
       leadTime: '3-7 Tage',
       suppliers: 'Medizinische Großhändler, Apotheken-Großhandel, Hersteller',
     },
@@ -265,12 +265,12 @@ const productDetails: Record<string, {
       { label: 'Altersgruppe', value: '3-12 Jahre' },
       { label: 'Abmessungen', value: '20 x 12 x 6 cm' },
       { label: 'Material Tasche', value: 'Buntes, wasserabweisendes Nylon' },
-      { label: 'Verpackung', value: '40 Stück/Karton' },
+      { label: 'Verpackung', value: '40 Stück/Karton (Karton 50x35x40cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Mittel',
-      description: 'Spezialisierte Sets, die individuell zusammengestellt werden. Erfordert Koordination mit mehreren Lieferanten.',
+      description: 'Abholung: Altstetten Lager, Lindenstrasse 23, 8048 Altstetten\n\nÖffnungszeiten: Mo-Fr 9:00-16:00\n\nZugänglichkeit: Keine LKW-Zufahrt, nur PKW/Transporter. Parkplätze direkt vor dem Gebäude.\n\nKontakt: Lisa Zimmermann, Tel: 044 345 67 93, Email: zimmermann@resilio-zh.ch\n\nHinweis: Sets müssen 2 Wochen im Voraus bestellt werden. Altersgerechte Zusammenstellung, Spielzeug geprüft.',
       leadTime: '2-3 Wochen',
       suppliers: 'Hilfsorganisationen (DRK, UNICEF), spezialisierte Anbieter',
     },
@@ -287,12 +287,12 @@ const productDetails: Record<string, {
       { label: 'Wirkstoff', value: 'Ethanol 70% (v/v)' },
       { label: 'Wirkspektrum', value: 'Viruzid, bakterizid, fungizid' },
       { label: 'Einwirkzeit', value: '30 Sekunden' },
-      { label: 'Verpackung', value: '12 Flaschen/Karton' },
+      { label: 'Verpackung', value: '12 Flaschen/Karton (Karton 40x30x30cm)' },
     ],
     image: '',
     procurement: {
       difficulty: 'Einfach',
-      description: 'Gut verfügbar über medizinische Großhändler und Apotheken. Standardprodukt mit kurzfristiger Lieferung.',
+      description: 'Abholung: Zürich Hauptlager, Badenerstrasse 123, 8004 Zürich (Medizinlager)\n\nÖffnungszeiten: Mo-Fr 8:00-17:00\n\nZugänglichkeit: Separater Eingang für medizinische Güter, LKW-Zufahrt vorhanden.\n\nKontakt: Dr. Michael Bauer, Tel: 044 123 45 88, Email: bauer@resilio-zh.ch\n\nHinweis: Kartonweise Ausgabe (12 Flaschen), Sicherheitsdatenblatt wird mitgeliefert. Gefahrguttransport beachten.',
       leadTime: '3-7 Tage',
       suppliers: 'Medizinische Großhändler, Apotheken-Großhandel, Hersteller',
     },
@@ -417,12 +417,20 @@ export function ProductDetail({ item, onBack }: ProductDetailProps) {
         <Card className="lg:col-span-1 p-6">
           <h1 className="mb-4 text-3xl font-bold">{item.product}</h1>
           <div className="aspect-square rounded-lg overflow-hidden bg-slate-100">
-            <div className="w-full h-full flex items-center justify-center">
-              {(() => {
-                const { icon: CategoryIcon, color } = getCategoryIcon(item.category);
-                return <CategoryIcon className={`w-16 h-16 ${color.replace('text-', 'text-slate-300')}`} />;
-              })()}
-            </div>
+            {details.image ? (
+              <img 
+                src={details.image} 
+                alt={item.product}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                {(() => {
+                  const { icon: CategoryIcon, color } = getCategoryIcon(item.category);
+                  return <CategoryIcon className={`w-16 h-16 ${color.replace('text-', 'text-slate-300')}`} />;
+                })()}
+              </div>
+            )}
           </div>
         </Card>
 
@@ -473,24 +481,8 @@ export function ProductDetail({ item, onBack }: ProductDetailProps) {
           <h2 className="mb-4">Beschaffung</h2>
           <div className="space-y-4">
             <div>
-              <Label className="text-slate-600">Beschaffungsschwierigkeit</Label>
-              <div className="mt-2">
-                {getDifficultyBadge(details.procurement.difficulty)}
-              </div>
-            </div>
-            <div>
               <Label className="text-slate-600">Beschreibung</Label>
               <p className="text-slate-700 mt-1">{details.procurement.description}</p>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label className="text-slate-600">Lieferzeit</Label>
-                <p className="text-slate-900">{details.procurement.leadTime}</p>
-              </div>
-              <div>
-                <Label className="text-slate-600">Lieferanten</Label>
-                <p className="text-slate-900">{details.procurement.suppliers}</p>
-              </div>
             </div>
           </div>
         </Card>

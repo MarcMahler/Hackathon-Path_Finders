@@ -305,7 +305,6 @@ export function Requested({ selectedRequest, onRequestSelect, onBack }: Requeste
           <TableHeader>
             <TableRow>
               <TableHead>Artikel</TableHead>
-              <TableHead>Priorität</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Erstellt</TableHead>
               <TableHead>Frist</TableHead>
@@ -329,7 +328,6 @@ export function Requested({ selectedRequest, onRequestSelect, onBack }: Requeste
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell>{getPriorityBadge(request.priority)}</TableCell>
                   <TableCell>{getStatusBadge(request.status)}</TableCell>
                   <TableCell className="text-slate-600">{formatDate(request.requestDate)}</TableCell>
                   <TableCell>
@@ -349,7 +347,7 @@ export function Requested({ selectedRequest, onRequestSelect, onBack }: Requeste
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-slate-500 py-8">
+                <TableCell colSpan={5} className="text-center text-slate-500 py-8">
                   Keine Anfragen gefunden
                 </TableCell>
               </TableRow>

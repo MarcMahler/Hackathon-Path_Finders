@@ -41,7 +41,6 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
   );
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
   const [requestNote, setRequestNote] = useState('');
-  const [priority, setPriority] = useState('Mittel');
   const [deadline, setDeadline] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -90,7 +89,7 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
       const newRequest = addRequest(
         cartItems, // This will be converted to the proper format by RequestUtils
         {
-          priority: priority,
+          priority: 'Mittel', // Default priority
           deadline: deadline,
           notes: requestNote || 'Anfrage über Warenkorb eingereicht',
           requestedBy: 'Janosch Beck', // Demo name
@@ -108,7 +107,6 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
         onClearCart();
         setCartItems([]);
         setRequestNote('');
-        setPriority('Mittel');
         setDeadline('');
         setIsSubmitting(false);
       }, 2000);
@@ -252,45 +250,18 @@ export function Cart({ items, onBack, onRemoveItem, onClearCart }: CartProps) {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="priority">
-                  Priorität <span className="text-red-500">*</span>
-                </Label>
-                <Select value={priority} onValueChange={setPriority}>
-                  <SelectTrigger id="priority" className="mt-2">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Niedrig">
-                      <Badge className="bg-slate-500 text-white hover:bg-slate-500">Niedrig</Badge>
-                    </SelectItem>
-                    <SelectItem value="Mittel">
-                      <Badge className="bg-blue-500 text-white hover:bg-blue-500">Mittel</Badge>
-                    </SelectItem>
-                    <SelectItem value="Hoch">
-                      <Badge className="bg-orange-500 text-white hover:bg-orange-500">Hoch</Badge>
-                    </SelectItem>
-                    <SelectItem value="Kritisch">
-                      <Badge className="bg-red-600 text-white hover:bg-red-600">Kritisch</Badge>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="deadline">
-                  Benötigt bis <span className="text-red-500">*</span>
-                </Label>
-                <Input
-                  id="deadline"
-                  type="date"
-                  value={deadline}
-                  onChange={(e) => setDeadline(e.target.value)}
-                  className="mt-2"
-                  min={new Date().toISOString().split('T')[0]}
-                />
-              </div>
+            <div>
+              <Label htmlFor="deadline">
+                Benötigt bis <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="deadline"
+                type="date"
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+                className="mt-2"
+                min={new Date().toISOString().split('T')[0]}
+              />
             </div>
 
             {!deadline && (
