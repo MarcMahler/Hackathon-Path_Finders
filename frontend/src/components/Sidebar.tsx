@@ -90,8 +90,17 @@ export function Sidebar({ activeModule, setActiveModule, openRequestsCount = 0, 
   return (
     <div className="w-64 bg-white border-r border-slate-200 flex flex-col">
       <div className="p-6 border-b border-slate-200">
-        <h1 className="text-3xl text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>Resilio</h1>
-        <p className="text-sm text-slate-500 mt-1">Crisis Manager</p>
+        <div className="flex items-center gap-10">
+          <img 
+            src="/logo.png" 
+            alt="Resilio Logo" 
+            className="w-20 h-20"
+          />
+          <div>
+            <h1 className="text-3xl text-slate-900" style={{ fontFamily: "'Playfair Display', serif" }}>Resilio</h1>
+            <p className="text-sm text-slate-500">Crisis Manager</p>
+          </div>
+        </div>
       </div>
       <nav className="flex-1 p-4 overflow-y-auto">
         {userRole === 'Lagerverwaltung' && crisisTeam ? (

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <rect x="128" y="128" width="512" height="512" fill="none" stroke="black" stroke-width="32"/>
+  <g fill="black">
+    <!-- Lion body and legs -->
+    <path d="M 320 280 Q 360 260 400 280 L 400 380 Q 400 420 360 440 L 280 440 Q 240 420 240 380 L 240 280 Q 280 260 320 280 Z"/>
+    <path d="M 240 380 L 220 460 L 240 480 L 260 460 L 250 390"/>
+    <path d="M 400 380 L 420 460 L 400 480 L 380 460 L 390 390"/>
+    
+    <!-- Lion head -->
+    <ellipse cx="320" cy="240" rx="60" ry="70" fill="white" stroke="black" stroke-width="8"/>
+    <path d="M 280 220 Q 260 200 260 180 Q 260 160 280 150" fill="none" stroke="black" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 360 220 Q 380 200 380 180 Q 380 160 360 150" fill="none" stroke="black" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 300 200 Q 280 180 270 160" fill="none" stroke="black" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 340 200 Q 360 180 370 160" fill="none" stroke="black" stroke-width="10" stroke-linecap="round"/>
+    
+    <!-- Lion facial features -->
+    <ellipse cx="300" cy="230" rx="6" ry="8"/>
+    <ellipse cx="340" cy="230" rx="6" ry="8"/>
+    <path d="M 320 240 L 320 260 M 310 265 Q 320 270 330 265" fill="none" stroke="black" stroke-width="4" stroke-linecap="round"/>
+    
+    <!-- Lion mane -->
+    <path d="M 260 200 Q 240 210 230 230 Q 220 250 230 270" fill="none" stroke="black" stroke-width="14" stroke-linecap="round"/>
+    <path d="M 380 200 Q 400 210 410 230 Q 420 250 410 270" fill="none" stroke="black" stroke-width="14" stroke-linecap="round"/>
+    <path d="M 280 170 Q 270 150 270 130" fill="none" stroke="black" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 320 160 Q 320 140 320 120" fill="none" stroke="black" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 360 170 Q 370 150 370 130" fill="none" stroke="black" stroke-width="12" stroke-linecap="round"/>
+    
+    <!-- Lion tail -->
+    <path d="M 360 440 Q 380 460 390 480 Q 400 500 390 520" fill="none" stroke="black" stroke-width="10" stroke-linecap="round"/>
+    
+    <!-- Box/crate -->
+    <rect x="430" y="450" width="110" height="90" fill="white" stroke="black" stroke-width="8"/>
+    <rect x="450" y="475" width="70" height="30" fill="white" stroke="black" stroke-width="6"/>
+  </g>
+</svg>
