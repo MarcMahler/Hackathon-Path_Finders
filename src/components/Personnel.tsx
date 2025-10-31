@@ -3,156 +3,259 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Label } from './ui/label';
 import { Badge } from './ui/badge';
 import { Avatar, AvatarFallback } from './ui/avatar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Plus, Search, Users, UserCheck, Clock, Shield } from 'lucide-react';
+import { Plus, Search, Circle } from 'lucide-react';
 
-const initialPersonnel = [
-  { id: 'PER-001', name: 'Dr. Sarah Mitchell', role: 'Medical Lead', team: 'Medical Response', status: 'Active', availability: 'Available', contact: '+1 555-0101' },
-  { id: 'PER-002', name: 'John Anderson', role: 'Logistics Coordinator', team: 'Supply Chain', status: 'Active', availability: 'On Assignment', contact: '+1 555-0102' },
-  { id: 'PER-003', name: 'Maria Garcia', role: 'Emergency Nurse', team: 'Medical Response', status: 'Active', availability: 'Available', contact: '+1 555-0103' },
-  { id: 'PER-004', name: 'David Chen', role: 'Communications Officer', team: 'Command', status: 'Active', availability: 'Available', contact: '+1 555-0104' },
-  { id: 'PER-005', name: 'Emily Thompson', role: 'Safety Officer', team: 'Safety & Security', status: 'Active', availability: 'On Assignment', contact: '+1 555-0105' },
-  { id: 'PER-006', name: 'Michael Brown', role: 'Resource Manager', team: 'Supply Chain', status: 'Active', availability: 'Available', contact: '+1 555-0106' },
-  { id: 'PER-007', name: 'Lisa Wang', role: 'Field Coordinator', team: 'Operations', status: 'Off Duty', availability: 'Unavailable', contact: '+1 555-0107' },
-  { id: 'PER-008', name: 'Robert Martinez', role: 'Transport Lead', team: 'Logistics', status: 'Active', availability: 'Available', contact: '+1 555-0108' },
+interface Person {
+  id: string;
+  name: string;
+  organisation: string;
+  rolle: string;
+  email: string;
+  tel: string;
+  lastSeen: Date;
+}
+
+const initialPersonnel: Person[] = [
+  { 
+    id: '1', 
+    name: 'Dr. Sarah Mitchell', 
+    organisation: 'Feuerwehr München', 
+    rolle: 'Einsatzleiter', 
+    email: 's.mitchell@feuerwehr-muenchen.de',
+    tel: '+49 89 2323-1234', 
+    lastSeen: new Date(Date.now() - 5 * 60 * 1000) // 5 minutes ago
+  },
+  { 
+    id: '2', 
+    name: 'Thomas Weber', 
+    organisation: 'THW Bayern', 
+    rolle: 'Logistik-Koordinator', 
+    email: 't.weber@thw.de',
+    tel: '+49 89 2323-1235', 
+    lastSeen: new Date(Date.now() - 30 * 60 * 1000) // 30 minutes ago
+  },
+  { 
+    id: '3', 
+    name: 'Anna Schneider', 
+    organisation: 'DRK München', 
+    rolle: 'Medizinische Versorgung', 
+    email: 'a.schneider@drk-muenchen.de',
+    tel: '+49 89 2323-1236', 
+    lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+  },
+  { 
+    id: '4', 
+    name: 'Michael Bauer', 
+    organisation: 'Polizei München', 
+    rolle: 'Sicherheitsbeauftragter', 
+    email: 'm.bauer@polizei.bayern.de',
+    tel: '+49 89 2323-1237', 
+    lastSeen: new Date(Date.now() - 15 * 60 * 1000) // 15 minutes ago
+  },
+  { 
+    id: '5', 
+    name: 'Julia Hoffmann', 
+    organisation: 'Stadtverwaltung München', 
+    rolle: 'Krisenkoordinator', 
+    email: 'j.hoffmann@muenchen.de',
+    tel: '+49 89 2323-1238', 
+    lastSeen: new Date(Date.now() - 1 * 60 * 1000) // 1 minute ago
+  },
+  { 
+    id: '6', 
+    name: 'Stefan Müller', 
+    organisation: 'THW Bayern', 
+    rolle: 'Technischer Dienst', 
+    email: 's.mueller@thw.de',
+    tel: '+49 89 2323-1239', 
+    lastSeen: new Date(Date.now() - 45 * 60 * 1000) // 45 minutes ago
+  },
+  { 
+    id: '7', 
+    name: 'Laura Schmidt', 
+    organisation: 'DRK München', 
+    rolle: 'Sanitäter', 
+    email: 'l.schmidt@drk-muenchen.de',
+    tel: '+49 89 2323-1240', 
+    lastSeen: new Date(Date.now() - 4 * 60 * 60 * 1000) // 4 hours ago
+  },
+  { 
+    id: '8', 
+    name: 'Robert Fischer', 
+    organisation: 'Feuerwehr München', 
+    rolle: 'Kommunikation', 
+    email: 'r.fischer@feuerwehr-muenchen.de',
+    tel: '+49 89 2323-1241', 
+    lastSeen: new Date(Date.now() - 10 * 60 * 1000) // 10 minutes ago
+  },
 ];
 
 export function Personnel() {
-  const [personnel, setPersonnel] = useState(initialPersonnel);
+  const [personnel, setPersonnel] = useState<Person[]>(initialPersonnel);
   const [searchTerm, setSearchTerm] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [newPerson, setNewPerson] = useState({
+    name: '',
+    organisation: '',
+    rolle: '',
+    email: '',
+    tel: '',
+  });
 
   const filteredPersonnel = personnel.filter(person =>
     person.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    person.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    person.team.toLowerCase().includes(searchTerm.toLowerCase())
+    person.organisation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    person.rolle.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const getInitials = (name: string) => {
-    return name.split(' ').map(n => n[0]).join('');
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
-  const getStatusBadge = (status: string) => {
-    if (status === 'Active') {
-      return <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Active</Badge>;
+  const formatLastSeen = (date: Date) => {
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Gerade eben';
+    if (diffMins < 60) return `vor ${diffMins} Min.`;
+    if (diffHours < 24) return `vor ${diffHours} Std.`;
+    return `vor ${diffDays} Tagen`;
+  };
+
+  const getOnlineStatus = (date: Date) => {
+    const diffMins = Math.floor((new Date().getTime() - date.getTime()) / 60000);
+    if (diffMins < 5) return 'online';
+    if (diffMins < 30) return 'away';
+    return 'offline';
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'online':
+        return 'text-green-500';
+      case 'away':
+        return 'text-yellow-500';
+      default:
+        return 'text-slate-400';
     }
-    return <Badge variant="secondary">Off Duty</Badge>;
   };
 
-  const getAvailabilityBadge = (availability: string) => {
-    const configs: Record<string, { className: string }> = {
-      'Available': { className: 'bg-green-100 text-green-800 hover:bg-green-100' },
-      'On Assignment': { className: 'bg-blue-100 text-blue-800 hover:bg-blue-100' },
-      'Unavailable': { className: 'bg-slate-100 text-slate-800 hover:bg-slate-100' },
-    };
-    const config = configs[availability] || configs['Available'];
-    return <Badge className={config.className}>{availability}</Badge>;
+  const handleAddPerson = () => {
+    if (newPerson.name && newPerson.organisation && newPerson.rolle && newPerson.email && newPerson.tel) {
+      const person: Person = {
+        id: String(personnel.length + 1),
+        name: newPerson.name,
+        organisation: newPerson.organisation,
+        rolle: newPerson.rolle,
+        email: newPerson.email,
+        tel: newPerson.tel,
+        lastSeen: new Date(),
+      };
+      setPersonnel([...personnel, person]);
+      setNewPerson({ name: '', organisation: '', rolle: '', email: '', tel: '' });
+      setIsAddDialogOpen(false);
+    }
   };
-
-  const totalPersonnel = personnel.length;
-  const activePersonnel = personnel.filter(p => p.status === 'Active').length;
-  const availablePersonnel = personnel.filter(p => p.availability === 'Available').length;
-
-  const stats = [
-    { label: 'Total Personnel', value: totalPersonnel, icon: Users, color: 'bg-blue-500' },
-    { label: 'Active On Duty', value: activePersonnel, icon: UserCheck, color: 'bg-green-500' },
-    { label: 'Available Now', value: availablePersonnel, icon: Shield, color: 'bg-purple-500' },
-  ];
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="mb-2">Personnel Management</h1>
-          <p className="text-slate-600">Manage emergency response team members and their assignments</p>
+          <h1 className="mb-2">Mitarbeiter</h1>
+          <p className="text-slate-600">Übersicht aller Krisenstabsmitarbeiter</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
               <Plus className="w-4 h-4" />
-              Add Personnel
+              Mitarbeiter hinzufügen
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent aria-describedby="add-personnel-description">
             <DialogHeader>
-              <DialogTitle>Add New Personnel</DialogTitle>
+              <DialogTitle>Neuen Mitarbeiter hinzufügen</DialogTitle>
+              <DialogDescription id="add-personnel-description">
+                Fügen Sie einen neuen Mitarbeiter zum Krisenstab hinzu.
+              </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div>
-                <Label>Full Name</Label>
-                <Input placeholder="Enter full name" />
+                <Label>Name</Label>
+                <Input 
+                  placeholder="Vollständiger Name" 
+                  value={newPerson.name}
+                  onChange={(e) => setNewPerson({ ...newPerson, name: e.target.value })}
+                />
               </div>
               <div>
-                <Label>Role</Label>
-                <Input placeholder="Enter role/position" />
+                <Label>Organisation</Label>
+                <Input 
+                  placeholder="z.B. Feuerwehr München" 
+                  value={newPerson.organisation}
+                  onChange={(e) => setNewPerson({ ...newPerson, organisation: e.target.value })}
+                />
               </div>
               <div>
-                <Label>Team</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select team" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="medical">Medical Response</SelectItem>
-                    <SelectItem value="supply">Supply Chain</SelectItem>
-                    <SelectItem value="command">Command</SelectItem>
-                    <SelectItem value="safety">Safety & Security</SelectItem>
-                    <SelectItem value="operations">Operations</SelectItem>
-                    <SelectItem value="logistics">Logistics</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label>Rolle</Label>
+                <Input 
+                  placeholder="z.B. Einsatzleiter" 
+                  value={newPerson.rolle}
+                  onChange={(e) => setNewPerson({ ...newPerson, rolle: e.target.value })}
+                />
               </div>
               <div>
-                <Label>Contact Number</Label>
-                <Input placeholder="+1 555-0000" />
+                <Label>E-Mail</Label>
+                <Input 
+                  type="email"
+                  placeholder="beispiel@organisation.de" 
+                  value={newPerson.email}
+                  onChange={(e) => setNewPerson({ ...newPerson, email: e.target.value })}
+                />
               </div>
               <div>
-                <Label>Status</Label>
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">Active</SelectItem>
-                    <SelectItem value="off">Off Duty</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label>Telefon</Label>
+                <Input 
+                  placeholder="+49 89 2323-1234" 
+                  value={newPerson.tel}
+                  onChange={(e) => setNewPerson({ ...newPerson, tel: e.target.value })}
+                />
               </div>
-              <Button className="w-full">Add Personnel</Button>
+              <div className="flex gap-2 pt-4">
+                <Button 
+                  variant="outline" 
+                  className="flex-1"
+                  onClick={() => {
+                    setIsAddDialogOpen(false);
+                    setNewPerson({ name: '', organisation: '', rolle: '', email: '', tel: '' });
+                  }}
+                >
+                  Abbrechen
+                </Button>
+                <Button 
+                  className="flex-1"
+                  onClick={handleAddPerson}
+                >
+                  Hinzufügen
+                </Button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} className="p-6">
-              <div className="flex items-center gap-4">
-                <div className={`${stat.color} p-3 rounded-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-slate-600 text-sm">{stat.label}</p>
-                  <p className="text-2xl">{stat.value}</p>
-                </div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
-
       <Card className="p-6">
-        <div className="mb-4">
+        <div className="mb-6">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
             <Input
-              placeholder="Search personnel by name, role, or team..."
+              placeholder="Suche nach Name, Organisation oder Rolle..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -163,42 +266,50 @@ export function Personnel() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Team</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Availability</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>Organisation</TableHead>
+              <TableHead>Rolle</TableHead>
+              <TableHead>E-Mail</TableHead>
+              <TableHead>Tel.</TableHead>
+              <TableHead>Last Seen</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredPersonnel.map((person) => (
-              <TableRow key={person.id}>
-                <TableCell className="text-slate-600">{person.id}</TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarFallback>{getInitials(person.name)}</AvatarFallback>
-                    </Avatar>
-                    <span>{person.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{person.role}</TableCell>
-                <TableCell>
-                  <Badge variant="outline">{person.team}</Badge>
-                </TableCell>
-                <TableCell className="text-slate-600">{person.contact}</TableCell>
-                <TableCell>{getStatusBadge(person.status)}</TableCell>
-                <TableCell>{getAvailabilityBadge(person.availability)}</TableCell>
-                <TableCell>
-                  <Button variant="outline" size="sm">Assign</Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {filteredPersonnel.map((person) => {
+              const status = getOnlineStatus(person.lastSeen);
+              return (
+                <TableRow key={person.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <Avatar>
+                          <AvatarFallback>{getInitials(person.name)}</AvatarFallback>
+                        </Avatar>
+                        <Circle 
+                          className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 ${getStatusColor(status)} fill-current bg-white rounded-full`} 
+                        />
+                      </div>
+                      <span>{person.name}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{person.organisation}</Badge>
+                  </TableCell>
+                  <TableCell className="text-slate-600">{person.rolle}</TableCell>
+                  <TableCell className="text-slate-600">{person.email}</TableCell>
+                  <TableCell className="text-slate-600">{person.tel}</TableCell>
+                  <TableCell className="text-slate-600">{formatLastSeen(person.lastSeen)}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
+
+        {filteredPersonnel.length === 0 && (
+          <div className="text-center py-12 text-slate-500">
+            Keine Mitarbeiter gefunden
+          </div>
+        )}
       </Card>
     </div>
   );

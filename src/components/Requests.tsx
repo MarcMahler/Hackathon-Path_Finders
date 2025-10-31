@@ -1,43 +1,238 @@
 import { useState } from 'react';
 import { Card } from './ui/card';
-import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Label } from './ui/label';
 import { Badge } from './ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Textarea } from './ui/textarea';
-import { Plus, Search, ClipboardList, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Search, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { RequestDetail } from './RequestDetail';
 
-const initialRequests = [
-  { id: 'REQ-001', requestedBy: 'Dr. Sarah Mitchell', resource: 'Medical Supplies Kit', quantity: 10, unit: 'kits', priority: 'High', status: 'Offen', requestDate: '2025-10-30', notes: 'Benötigt für Feldkrankenhaus Nord' },
-  { id: 'REQ-002', requestedBy: 'John Anderson', resource: 'Emergency Food Rations', quantity: 50, unit: 'pallets', priority: 'Critical', status: 'Akzeptiert', requestDate: '2025-10-30', notes: 'Dringend für Notunterkunft #1' },
-  { id: 'REQ-003', requestedBy: 'Maria Garcia', resource: 'Water Bottles (500ml)', quantity: 500, unit: 'bottles', priority: 'High', status: 'Offen', requestDate: '2025-10-29', notes: 'Verteilung in Zone 3' },
-  { id: 'REQ-004', requestedBy: 'David Chen', resource: 'Communication Radios', quantity: 5, unit: 'units', priority: 'Medium', status: 'Abgelehnt', requestDate: '2025-10-29', notes: 'Nicht genügend Bestand verfügbar' },
-  { id: 'REQ-005', requestedBy: 'Emily Thompson', resource: 'Portable Generators', quantity: 2, unit: 'units', priority: 'Critical', status: 'Akzeptiert', requestDate: '2025-10-28', notes: 'Für Kommunikationszentrale' },
-  { id: 'REQ-006', requestedBy: 'Michael Brown', resource: 'Blankets', quantity: 100, unit: 'units', priority: 'Medium', status: 'Offen', requestDate: '2025-10-28', notes: 'Notunterkunft #2' },
-  { id: 'REQ-007', requestedBy: 'Lisa Wang', resource: 'Tents (6-person)', quantity: 8, unit: 'units', priority: 'High', status: 'Akzeptiert', requestDate: '2025-10-27', notes: 'Temporäres Lager Zone 5' },
-  { id: 'REQ-008', requestedBy: 'Robert Martinez', resource: 'Fuel (Diesel)', quantity: 200, unit: 'liters', priority: 'High', status: 'Offen', requestDate: '2025-10-27', notes: 'Für Transportfahrzeuge' },
+interface Article {
+  id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+  status: 'Pending' | 'Accepted' | 'Rejected';
+}
+
+interface HistoryEntry {
+  id: string;
+  timestamp: string;
+  action: string;
+  comment: string;
+  articles: Article[];
+  user: string;
+}
+
+interface RequestType {
+  id: string;
+  organisation: string;
+  requestedBy: string;
+  priority: string;
+  status: string;
+  requestDate: string;
+  notes: string;
+  deadline: string;
+  articles: Article[];
+  history?: HistoryEntry[];
+}
+
+const initialRequests: RequestType[] = [
+  { 
+    id: 'REQ-001', 
+    organisation: 'Rotes Kreuz München', 
+    requestedBy: 'Dr. Sarah Mitchell', 
+    priority: 'High', 
+    status: 'Offen', 
+    requestDate: '2025-10-30', 
+    notes: 'Benötigt für Feldkrankenhaus Nord', 
+    deadline: '2025-11-02',
+    articles: [
+      { id: 'ART-001', name: 'Feldbetten', quantity: 50, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-002', name: 'Decken', quantity: 80, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-003', name: 'Medizinische Masken', quantity: 500, unit: 'Stück', status: 'Pending' },
+    ]
+  },
+  { 
+    id: 'REQ-002', 
+    organisation: 'THW Bayern', 
+    requestedBy: 'John Anderson', 
+    priority: 'Critical', 
+    status: 'Akzeptiert', 
+    requestDate: '2025-10-30', 
+    notes: 'Dringend für Notunterkunft #1', 
+    deadline: '2025-10-31',
+    articles: [
+      { id: 'ART-004', name: 'Warme Mahlzeiten', quantity: 150, unit: 'Portionen', status: 'Accepted' },
+      { id: 'ART-005', name: 'Trinkwasser', quantity: 800, unit: 'Liter', status: 'Accepted' },
+    ],
+    history: [
+      {
+        id: 'HIST-001',
+        timestamp: '2025-10-30T14:23:00',
+        action: 'Request überprüft und abgeschlossen',
+        comment: 'Alle Artikel wurden genehmigt. Notunterkunft hat höchste Priorität. Lieferung wurde für morgen früh angesetzt.',
+        articles: [
+          { id: 'ART-004', name: 'Warme Mahlzeiten', quantity: 150, unit: 'Portionen', status: 'Accepted' },
+          { id: 'ART-005', name: 'Trinkwasser', quantity: 800, unit: 'Liter', status: 'Accepted' },
+        ],
+        user: 'Admin User (Überprüfer)',
+      },
+      {
+        id: 'HIST-002',
+        timestamp: '2025-10-30T10:15:00',
+        action: 'Request erstellt',
+        comment: 'Dringende Anfrage für Notunterkunft #1 eingegangen.',
+        articles: [
+          { id: 'ART-004', name: 'Warme Mahlzeiten', quantity: 150, unit: 'Portionen', status: 'Pending' },
+          { id: 'ART-005', name: 'Trinkwasser', quantity: 800, unit: 'Liter', status: 'Pending' },
+        ],
+        user: 'John Anderson (Requester)',
+      },
+    ]
+  },
+  { 
+    id: 'REQ-003', 
+    organisation: 'Feuerwehr München', 
+    requestedBy: 'Maria Garcia', 
+    priority: 'High', 
+    status: 'Offen', 
+    requestDate: '2025-10-29', 
+    notes: 'Verteilung in Zone 3', 
+    deadline: '2025-11-01',
+    articles: [
+      { id: 'ART-006', name: 'Trinkwasser', quantity: 600, unit: 'Liter', status: 'Pending' },
+      { id: 'ART-007', name: 'Desinfektionsmittel', quantity: 50, unit: 'Liter', status: 'Pending' },
+    ]
+  },
+  { 
+    id: 'REQ-004', 
+    organisation: 'Polizei München', 
+    requestedBy: 'David Chen', 
+    priority: 'Medium', 
+    status: 'Abgelehnt', 
+    requestDate: '2025-10-29', 
+    notes: 'Nicht genügend Bestand verfügbar', 
+    deadline: '2025-11-03',
+    articles: [
+      { id: 'ART-008', name: 'Wohnung Familie (4 Pers.)', quantity: 5, unit: 'Einheiten', status: 'Rejected' },
+    ]
+  },
+  { 
+    id: 'REQ-005', 
+    organisation: 'Bundeswehr', 
+    requestedBy: 'Emily Thompson', 
+    priority: 'Critical', 
+    status: 'Akzeptiert', 
+    requestDate: '2025-10-28', 
+    notes: 'Für Kommunikationszentrale', 
+    deadline: '2025-10-30',
+    articles: [
+      { id: 'ART-009', name: 'Feldbetten', quantity: 40, unit: 'Stück', status: 'Accepted' },
+      { id: 'ART-010', name: 'Schlafsäcke', quantity: 40, unit: 'Stück', status: 'Accepted' },
+    ]
+  },
+  { 
+    id: 'REQ-006', 
+    organisation: 'Johanniter', 
+    requestedBy: 'Michael Brown', 
+    priority: 'Medium', 
+    status: 'Offen', 
+    requestDate: '2025-10-28', 
+    notes: 'Notunterkunft #2', 
+    deadline: '2025-11-04',
+    articles: [
+      { id: 'ART-011', name: 'Decken', quantity: 120, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-012', name: 'Necessair Unisex', quantity: 80, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-013', name: 'Schlafsäcke', quantity: 60, unit: 'Stück', status: 'Pending' },
+    ]
+  },
+  { 
+    id: 'REQ-007', 
+    organisation: 'Malteser', 
+    requestedBy: 'Lisa Wang', 
+    priority: 'High', 
+    status: 'Akzeptiert', 
+    requestDate: '2025-10-27', 
+    notes: 'Temporäres Lager Zone 5', 
+    deadline: '2025-11-01',
+    articles: [
+      { id: 'ART-014', name: 'Feldbetten', quantity: 35, unit: 'Stück', status: 'Accepted' },
+    ]
+  },
+  { 
+    id: 'REQ-008', 
+    organisation: 'ASB München', 
+    requestedBy: 'Robert Martinez', 
+    priority: 'High', 
+    status: 'Offen', 
+    requestDate: '2025-10-27', 
+    notes: 'Für Transportfahrzeuge', 
+    deadline: '2025-11-02',
+    articles: [
+      { id: 'ART-015', name: 'Sandwiches', quantity: 200, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-016', name: 'Trinkwasser', quantity: 400, unit: 'Liter', status: 'Pending' },
+    ]
+  },
+  { 
+    id: 'REQ-009', 
+    organisation: 'DLRG', 
+    requestedBy: 'Sophie Weber', 
+    priority: 'Medium', 
+    status: 'Offen', 
+    requestDate: '2025-10-26', 
+    notes: 'Rettungsausrüstung für Wassergebiet', 
+    deadline: '2025-11-05',
+    articles: [
+      { id: 'ART-017', name: 'Windeln (Baby)', quantity: 30, unit: 'Pakete', status: 'Pending' },
+      { id: 'ART-018', name: 'Hygiene-Sets Kinder', quantity: 40, unit: 'Stück', status: 'Pending' },
+    ]
+  },
+  { 
+    id: 'REQ-010', 
+    organisation: 'DRK München', 
+    requestedBy: 'Thomas Müller', 
+    priority: 'Low', 
+    status: 'Offen', 
+    requestDate: '2025-10-26', 
+    notes: 'Nachschub für Erste-Hilfe-Stationen', 
+    deadline: '2025-11-06',
+    articles: [
+      { id: 'ART-019', name: 'Medizinische Masken', quantity: 300, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-020', name: 'Desinfektionsmittel', quantity: 25, unit: 'Liter', status: 'Pending' },
+    ]
+  },
 ];
 
-export function Requests() {
+interface RequestsProps {
+  selectedRequest: RequestType | null;
+  onRequestSelect: (request: RequestType) => void;
+  onBack: () => void;
+  onProductClick: (productName: string) => void;
+}
+
+export function Requests({ selectedRequest, onRequestSelect, onBack, onProductClick }: RequestsProps) {
   const [requests, setRequests] = useState(initialRequests);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('Alle');
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('Offen');
+
+  if (selectedRequest) {
+    return (
+      <RequestDetail 
+        request={selectedRequest} 
+        onBack={onBack}
+        onProductClick={onProductClick}
+      />
+    );
+  }
 
   const filteredRequests = requests
     .filter(request =>
       (request.requestedBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      request.resource.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      request.id.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      request.organisation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.notes.toLowerCase().includes(searchTerm.toLowerCase())) &&
       (statusFilter === 'Alle' || request.status === statusFilter)
-    )
-    .sort((a, b) => {
-      const statusOrder = { 'Offen': 1, 'Akzeptiert': 2, 'Abgelehnt': 3 };
-      return statusOrder[a.status as keyof typeof statusOrder] - statusOrder[b.status as keyof typeof statusOrder];
-    });
+    );
 
   const getStatusBadge = (status: string) => {
     const configs: Record<string, { className: string; icon: any }> = {
@@ -66,96 +261,24 @@ export function Requests() {
     return <Badge className={config.className}>{priority}</Badge>;
   };
 
-  const totalRequests = requests.length;
-  const openRequests = requests.filter(r => r.status === 'Offen').length;
-  const acceptedRequests = requests.filter(r => r.status === 'Akzeptiert').length;
-  const rejectedRequests = requests.filter(r => r.status === 'Abgelehnt').length;
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('de-DE');
+  };
 
-  const stats = [
-    { label: 'Gesamt Anfragen', value: totalRequests, icon: ClipboardList, color: 'bg-blue-500' },
-    { label: 'Offen', value: openRequests, icon: Clock, color: 'bg-yellow-500' },
-    { label: 'Akzeptiert', value: acceptedRequests, icon: CheckCircle, color: 'bg-green-500' },
-    { label: 'Abgelehnt', value: rejectedRequests, icon: XCircle, color: 'bg-red-500' },
-  ];
+  const isDeadlineUrgent = (deadline: string) => {
+    const deadlineDate = new Date(deadline);
+    const today = new Date();
+    const diffTime = deadlineDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays <= 2 && diffDays >= 0;
+  };
 
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="mb-2">Ressourcenanfragen</h1>
-          <p className="text-slate-600">Verwalten Sie alle Ressourcenanfragen von Krisenstabsmitarbeitern</p>
-        </div>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild>
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" />
-              Neue Anfrage
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
-              <DialogTitle>Neue Ressourcenanfrage erstellen</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 mt-4">
-              <div>
-                <Label>Ressource</Label>
-                <Input placeholder="Name der benötigten Ressource" className="mt-2" />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Menge</Label>
-                  <Input type="number" placeholder="0" className="mt-2" />
-                </div>
-                <div>
-                  <Label>Einheit</Label>
-                  <Input placeholder="z.B. Stück, Paletten" className="mt-2" />
-                </div>
-              </div>
-              <div>
-                <Label>Priorität</Label>
-                <Select>
-                  <SelectTrigger className="mt-2">
-                    <SelectValue placeholder="Priorität wählen" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="critical">Critical</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="low">Low</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Notizen</Label>
-                <Textarea 
-                  placeholder="Zusätzliche Informationen zur Anfrage..." 
-                  rows={3}
-                  className="mt-2"
-                />
-              </div>
-              <Button className="w-full">Anfrage erstellen</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={index} className="p-6">
-              <div className="flex items-center gap-4">
-                <div className={`${stat.color} p-3 rounded-lg`}>
-                  <Icon className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-slate-600 text-sm">{stat.label}</p>
-                  <p className="text-2xl">{stat.value}</p>
-                </div>
-              </div>
-            </Card>
-          );
-        })}
+      <div className="mb-8">
+        <h1 className="mb-2">Ressourcenanfragen</h1>
+        <p className="text-slate-600">Verwalten Sie alle Ressourcenanfragen von Krisenstabsmitarbeitern</p>
       </div>
 
       <Card className="p-6">
@@ -163,7 +286,7 @@ export function Requests() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
             <Input
-              placeholder="Suche nach Anfragen, Ressourcen oder Mitarbeitern..."
+              placeholder="Suche nach Organisation, Name oder Notizen..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
@@ -174,10 +297,10 @@ export function Requests() {
               <SelectValue placeholder="Status filtern" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Alle">Alle Status</SelectItem>
               <SelectItem value="Offen">Offen</SelectItem>
               <SelectItem value="Akzeptiert">Akzeptiert</SelectItem>
               <SelectItem value="Abgelehnt">Abgelehnt</SelectItem>
+              <SelectItem value="Alle">Alle Status</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -185,67 +308,55 @@ export function Requests() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>ID</TableHead>
-              <TableHead>Angefragt von</TableHead>
-              <TableHead>Ressource</TableHead>
-              <TableHead>Menge</TableHead>
-              <TableHead>Priorität</TableHead>
+              <TableHead>Organisation</TableHead>
+              <TableHead>Name des Requester</TableHead>
+              <TableHead>Priority</TableHead>
               <TableHead>Status</TableHead>
-              <TableHead>Datum</TableHead>
+              <TableHead>Erstellt</TableHead>
+              <TableHead>Deadline</TableHead>
               <TableHead>Notizen</TableHead>
-              <TableHead>Aktionen</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredRequests.map((request) => (
-              <TableRow key={request.id}>
-                <TableCell className="text-slate-600">{request.id}</TableCell>
-                <TableCell>{request.requestedBy}</TableCell>
-                <TableCell>{request.resource}</TableCell>
-                <TableCell>
-                  {request.quantity} {request.unit}
-                </TableCell>
-                <TableCell>{getPriorityBadge(request.priority)}</TableCell>
-                <TableCell>{getStatusBadge(request.status)}</TableCell>
-                <TableCell className="text-slate-600">{request.requestDate}</TableCell>
-                <TableCell className="text-slate-600 max-w-[200px] truncate">{request.notes}</TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    {request.status === 'Offen' && (
-                      <>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="text-green-600 hover:text-green-700"
-                          onClick={() => {
-                            setRequests(requests.map(r => 
-                              r.id === request.id ? { ...r, status: 'Akzeptiert' } : r
-                            ));
-                          }}
-                        >
-                          Akzeptieren
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="text-red-600 hover:text-red-700"
-                          onClick={() => {
-                            setRequests(requests.map(r => 
-                              r.id === request.id ? { ...r, status: 'Abgelehnt' } : r
-                            ));
-                          }}
-                        >
-                          Ablehnen
-                        </Button>
-                      </>
-                    )}
-                    {request.status !== 'Offen' && (
-                      <Button variant="outline" size="sm">Details</Button>
-                    )}
-                  </div>
+            {filteredRequests.length > 0 ? (
+              filteredRequests.map((request) => (
+                <TableRow 
+                  key={request.id}
+                  className="cursor-pointer hover:bg-slate-50"
+                  onClick={() => onRequestSelect(request)}
+                >
+                  <TableCell>
+                    <div>
+                      <p>{request.organisation}</p>
+                      <p className="text-sm text-slate-500">{request.id}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell>{request.requestedBy}</TableCell>
+                  <TableCell>{getPriorityBadge(request.priority)}</TableCell>
+                  <TableCell>{getStatusBadge(request.status)}</TableCell>
+                  <TableCell className="text-slate-600">{formatDate(request.requestDate)}</TableCell>
+                  <TableCell>
+                    <Badge 
+                      variant="outline" 
+                      className={isDeadlineUrgent(request.deadline) ? 'border-red-500 text-red-700' : 'text-slate-600'}
+                    >
+                      {formatDate(request.deadline)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="max-w-[300px]">
+                    <p className="truncate text-slate-600" title={request.notes}>
+                      {request.notes}
+                    </p>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center text-slate-500 py-8">
+                  Keine Anfragen gefunden
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </Card>
