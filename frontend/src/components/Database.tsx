@@ -352,34 +352,6 @@ export function Database({ onProductSelect, userRole, onViewCart, onAddToCart, c
               <p className="text-slate-600">Übersicht aller verfügbaren Produkte und Bestände</p>
             </>
           )}
-          
-          {/* API Status Indicator */}
-          <div className="flex items-center gap-4 mt-2">
-            <div className="flex items-center gap-2">
-              <div className={`w-2 h-2 rounded-full ${isApiConnected ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
-              <span className="text-xs text-slate-500">
-                {isApiConnected ? '🌐 Live-Daten' : '💾 Offline-Modus'}
-              </span>
-            </div>
-            {lastFetch && (
-              <span className="text-xs text-slate-400">
-                Aktualisiert: {lastFetch.toLocaleTimeString()}
-              </span>
-            )}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={fetchInventoryData}
-              className="h-6 px-2 text-xs"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <Loader2 className="w-3 h-3 animate-spin" />
-              ) : (
-                <RefreshCw className="w-3 h-3" />
-              )}
-            </Button>
-          </div>
         </div>
         {userRole === 'Lagerverwaltung' && (
           <Button 
