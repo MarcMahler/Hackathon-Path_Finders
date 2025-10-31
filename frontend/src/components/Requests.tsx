@@ -14,6 +14,8 @@ interface Article {
   quantity: number;
   unit: string;
   status: 'Pending' | 'Accepted' | 'Rejected';
+  acceptedQuantity: number;
+  rejectedQuantity: number;
 }
 
 interface HistoryEntry {
@@ -43,15 +45,15 @@ const initialRequests: RequestType[] = [
     id: 'REQ-001', 
     organisation: 'Schweizerisches Rotes Kreuz Zürich', 
     requestedBy: 'Dr. Sarah Mitchell', 
-    priority: 'Hoch', 
-    status: 'Offen', 
+    priority: 'Kritisch', 
+    status: 'Akzeptiert', 
     requestDate: '2025-10-30', 
-    notes: 'Benötigt für Feldkrankenhaus Nord', 
-    deadline: '2025-11-02',
+    notes: 'DRINGEND: Großbrand in Industriegebiet - Notfallversorgung für 200 Personen', 
+    deadline: '2025-10-31',
     articles: [
-      { id: 'ART-001', name: 'Feldbetten', quantity: 50, unit: 'Stück', status: 'Pending' },
-      { id: 'ART-002', name: 'Decken', quantity: 80, unit: 'Stück', status: 'Pending' },
-      { id: 'ART-003', name: 'Masken', quantity: 500, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-001', name: 'Feldbetten', quantity: 50, unit: 'Stück', status: 'Accepted', acceptedQuantity: 50, rejectedQuantity: 0 },
+      { id: 'ART-002', name: 'Decken', quantity: 80, unit: 'Stück', status: 'Accepted', acceptedQuantity: 80, rejectedQuantity: 0 },
+      { id: 'ART-003', name: 'Warme Mahlzeiten', quantity: 200, unit: 'Portionen', status: 'Accepted', acceptedQuantity: 200, rejectedQuantity: 0 },
     ]
   },
   { 
@@ -59,37 +61,14 @@ const initialRequests: RequestType[] = [
     organisation: 'Zivilschutz Zürich', 
     requestedBy: 'John Anderson', 
     priority: 'Kritisch', 
-    status: 'Akzeptiert', 
+    status: 'Offen', 
     requestDate: '2025-10-30', 
-    notes: 'Dringend für Notunterkunft #1', 
+    notes: 'Evakuierung Wohnblock - 150 Personen benötigen sofortige Unterkunft', 
     deadline: '2025-10-31',
     articles: [
-      { id: 'ART-004', name: 'Warme Mahlzeiten', quantity: 150, unit: 'Portionen', status: 'Accepted' },
-      { id: 'ART-005', name: 'Trinkwasser', quantity: 800, unit: 'Liter', status: 'Accepted' },
-    ],
-    history: [
-      {
-        id: 'HIST-001',
-        timestamp: '2025-10-30T14:23:00',
-        action: 'Anfrage überprüft und abgeschlossen',
-        comment: 'Alle Artikel wurden genehmigt. Notunterkunft hat höchste Priorität. Lieferung wurde für morgen früh angesetzt.',
-        articles: [
-          { id: 'ART-004', name: 'Warme Mahlzeiten', quantity: 150, unit: 'Portionen', status: 'Accepted' },
-          { id: 'ART-005', name: 'Trinkwasser', quantity: 800, unit: 'Liter', status: 'Accepted' },
-        ],
-        user: 'Admin User (Überprüfer)',
-      },
-      {
-        id: 'HIST-002',
-        timestamp: '2025-10-30T10:15:00',
-        action: 'Anfrage erstellt',
-        comment: 'Dringende Anfrage für Notunterkunft #1 eingegangen.',
-        articles: [
-          { id: 'ART-004', name: 'Warme Mahlzeiten', quantity: 150, unit: 'Portionen', status: 'Pending' },
-          { id: 'ART-005', name: 'Trinkwasser', quantity: 800, unit: 'Liter', status: 'Pending' },
-        ],
-        user: 'John Anderson (Anfragender)',
-      },
+      { id: 'ART-004', name: 'Feldbetten', quantity: 150, unit: 'Stück', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
+      { id: 'ART-005', name: 'Schlafsäcke', quantity: 150, unit: 'Stück', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
+      { id: 'ART-024', name: 'Hygieneset', quantity: 150, unit: 'Stück', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
     ]
   },
   { 
@@ -97,82 +76,83 @@ const initialRequests: RequestType[] = [
     organisation: 'Feuerwehr Zürich', 
     requestedBy: 'Maria Garcia', 
     priority: 'Hoch', 
-    status: 'Offen', 
+    status: 'Akzeptiert', 
     requestDate: '2025-10-29', 
-    notes: 'Verteilung in Zone 3', 
+    notes: 'Einsatzzentrum Zone 3 - Versorgung Einsatzkräfte 48h', 
     deadline: '2025-11-01',
     articles: [
-      { id: 'ART-006', name: 'Trinkwasser', quantity: 600, unit: 'Liter', status: 'Pending' },
-      { id: 'ART-007', name: 'Desinfektionsmittel', quantity: 50, unit: 'Liter', status: 'Pending' },
+      { id: 'ART-006', name: 'Trinkwasser', quantity: 600, unit: 'Liter', status: 'Accepted', acceptedQuantity: 600, rejectedQuantity: 0 },
+      { id: 'ART-007', name: 'Sandwiches', quantity: 120, unit: 'Stück', status: 'Accepted', acceptedQuantity: 120, rejectedQuantity: 0 },
     ]
   },
   { 
     id: 'REQ-004', 
     organisation: 'Stadtpolizei Zürich', 
     requestedBy: 'David Chen', 
-    priority: 'Mittel', 
+    priority: 'Niedrig', 
     status: 'Abgelehnt', 
     requestDate: '2025-10-29', 
-    notes: 'Nicht genügend Bestand verfügbar', 
-    deadline: '2025-11-03',
+    notes: 'Büroausstattung Ersatz - nicht kritisch für Notfall', 
+    deadline: '2025-11-15',
     articles: [
-      { id: 'ART-008', name: 'Tisch', quantity: 15, unit: 'Stück', status: 'Rejected' },
+      { id: 'ART-008', name: 'Tisch', quantity: 15, unit: 'Stück', status: 'Rejected', acceptedQuantity: 0, rejectedQuantity: 15 },
+      { id: 'ART-025', name: 'Stuhl', quantity: 30, unit: 'Stück', status: 'Rejected', acceptedQuantity: 0, rejectedQuantity: 30 },
     ]
   },
   { 
     id: 'REQ-005', 
     organisation: 'Schweizer Armee', 
     requestedBy: 'Emily Thompson', 
-    priority: 'Kritisch', 
-    status: 'Akzeptiert', 
+    priority: 'Hoch', 
+    status: 'Teilweise genehmigt', 
     requestDate: '2025-10-28', 
-    notes: 'Für Kommunikationszentrale', 
+    notes: 'Kommunikationszentrale - kritische Infrastruktur', 
     deadline: '2025-10-30',
     articles: [
-      { id: 'ART-009', name: 'Feldbetten', quantity: 40, unit: 'Stück', status: 'Accepted' },
-      { id: 'ART-010', name: 'Schlafsäcke', quantity: 40, unit: 'Stück', status: 'Accepted' },
+      { id: 'ART-009', name: 'Feldbetten', quantity: 40, unit: 'Stück', status: 'Accepted', acceptedQuantity: 40, rejectedQuantity: 0 },
+      { id: 'ART-010', name: 'Schlafsäcke', quantity: 60, unit: 'Stück', status: 'Accepted', acceptedQuantity: 60, rejectedQuantity: 0 },
     ]
   },
   { 
     id: 'REQ-006', 
     organisation: 'Johanniter', 
     requestedBy: 'Michael Brown', 
-    priority: 'Mittel', 
+    priority: 'Hoch', 
     status: 'Offen', 
     requestDate: '2025-10-28', 
-    notes: 'Notunterkunft #2', 
-    deadline: '2025-11-04',
+    notes: 'Notunterkunft Gymnasium - 100 Familien mit Kindern', 
+    deadline: '2025-11-01',
     articles: [
-      { id: 'ART-011', name: 'Decken', quantity: 120, unit: 'Stück', status: 'Pending' },
-      { id: 'ART-012', name: 'Hygieneset', quantity: 80, unit: 'Stück', status: 'Pending' },
-      { id: 'ART-013', name: 'Schlafsäcke', quantity: 60, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-011', name: 'Decken', quantity: 120, unit: 'Stück', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
+      { id: 'ART-012', name: 'Kinder-Hygieneset', quantity: 80, unit: 'Stück', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
+      { id: 'ART-013', name: 'Windeln', quantity: 60, unit: 'Pakete', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
     ]
   },
   { 
     id: 'REQ-007', 
     organisation: 'Malteser', 
     requestedBy: 'Lisa Wang', 
-    priority: 'Hoch', 
-    status: 'Akzeptiert', 
+    priority: 'Mittel', 
+    status: 'Abgelehnt', 
     requestDate: '2025-10-27', 
-    notes: 'Temporäres Lager Zone 5', 
-    deadline: '2025-11-01',
+    notes: 'Planungsreserve - nicht zeitkritisch bei aktueller Lage', 
+    deadline: '2025-11-05',
     articles: [
-      { id: 'ART-014', name: 'Feldbetten', quantity: 35, unit: 'Stück', status: 'Accepted' },
+      { id: 'ART-014', name: 'Tisch', quantity: 35, unit: 'Stück', status: 'Rejected', acceptedQuantity: 0, rejectedQuantity: 35 },
     ]
   },
   { 
     id: 'REQ-008', 
     organisation: 'Samariterverein Zürich', 
     requestedBy: 'Robert Martinez', 
-    priority: 'Hoch', 
-    status: 'Offen', 
+    priority: 'Kritisch', 
+    status: 'Akzeptiert', 
     requestDate: '2025-10-27', 
-    notes: 'Für Transportfahrzeuge', 
-    deadline: '2025-11-02',
+    notes: 'Mobile Sanitätsstation - Versorgung Verletzte aus Katastrophengebiet', 
+    deadline: '2025-10-30',
     articles: [
-      { id: 'ART-015', name: 'Sandwiches', quantity: 200, unit: 'Stück', status: 'Pending' },
-      { id: 'ART-016', name: 'Trinkwasser', quantity: 400, unit: 'Liter', status: 'Pending' },
+      { id: 'ART-015', name: 'Hygieneset', quantity: 200, unit: 'Stück', status: 'Accepted', acceptedQuantity: 200, rejectedQuantity: 0 },
+      { id: 'ART-016', name: 'Desinfektionsmittel', quantity: 50, unit: 'Liter', status: 'Accepted', acceptedQuantity: 50, rejectedQuantity: 0 },
     ]
   },
   { 
@@ -182,25 +162,26 @@ const initialRequests: RequestType[] = [
     priority: 'Mittel', 
     status: 'Offen', 
     requestDate: '2025-10-26', 
-    notes: 'Rettungsausrüstung für Wassergebiet', 
+    notes: 'Wasserrettung Limmat - präventive Bereitstellung', 
     deadline: '2025-11-05',
     articles: [
-      { id: 'ART-017', name: 'Windeln', quantity: 30, unit: 'Pakete', status: 'Pending' },
-      { id: 'ART-018', name: 'Kinder-Hygieneset', quantity: 40, unit: 'Stück', status: 'Pending' },
+      { id: 'ART-017', name: 'Trinkwasser', quantity: 300, unit: 'Liter', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
+      { id: 'ART-018', name: 'Warme Mahlzeiten', quantity: 40, unit: 'Portionen', status: 'Pending', acceptedQuantity: 0, rejectedQuantity: 0 },
     ]
   },
   { 
     id: 'REQ-010', 
-    organisation: 'Schweizerisches Rotes Kreuz Zürich', 
+    organisation: 'Pflegezentrum Seeblick', 
     requestedBy: 'Thomas Müller', 
-    priority: 'Niedrig', 
-    status: 'Offen', 
+    priority: 'Hoch', 
+    status: 'Teilweise genehmigt', 
     requestDate: '2025-10-26', 
-    notes: 'Nachschub für Erste-Hilfe-Stationen', 
-    deadline: '2025-11-06',
+    notes: 'Evakuierung Pflegeheim - 80 betreuungsbedürftige Personen', 
+    deadline: '2025-11-02',
     articles: [
-      { id: 'ART-019', name: 'Masken', quantity: 300, unit: 'Stück', status: 'Pending' },
-      { id: 'ART-020', name: 'Desinfektionsmittel', quantity: 25, unit: 'Liter', status: 'Pending' },
+      { id: 'ART-019', name: 'Feldbetten', quantity: 80, unit: 'Stück', status: 'Accepted', acceptedQuantity: 80, rejectedQuantity: 0 },
+      { id: 'ART-020', name: 'Hygieneset', quantity: 80, unit: 'Stück', status: 'Accepted', acceptedQuantity: 80, rejectedQuantity: 0 },
+      { id: 'ART-021', name: 'Windeln', quantity: 40, unit: 'Pakete', status: 'Accepted', acceptedQuantity: 40, rejectedQuantity: 0 },
     ]
   },
 ];
@@ -214,7 +195,8 @@ interface RequestsProps {
 
 export function Requests({ selectedRequest, onRequestSelect, onBack, onProductClick }: RequestsProps) {
   const { getRequestsForChairman, updateRequestStatus } = useRequests();
-  const requests = getRequestsForChairman(); // Get dynamic data instead of hardcoded
+  const dynamicRequests = getRequestsForChairman(); // Get requests from app usage
+  const requests = [...dynamicRequests, ...initialRequests]; // New requests first, then dummy data
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('Offen');
 

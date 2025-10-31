@@ -151,7 +151,8 @@ interface RequestedProps {
 
 export function Requested({ selectedRequest, onRequestSelect, onBack }: RequestedProps) {
   const { getRequestsForEmployee, getRequestCountsByStatus } = useRequests();
-  const requestedItems = getRequestsForEmployee(); // Get dynamic data
+  const dynamicRequestedItems = getRequestsForEmployee(); // Get requests from app usage
+  const requestedItems = [...dynamicRequestedItems, ...mockRequestedItems]; // New requests first, then dummy data
   const requestCounts = getRequestCountsByStatus(); // Get dynamic counts
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
