@@ -1,4 +1,4 @@
-import { Database, ClipboardList, Users, Play, Settings as SettingsIcon, Warehouse, LogOut, FileText, ShoppingCart, Package, ListTodo, TruckIcon, ChevronDown, ChevronRight } from 'lucide-react';
+import { Database, ClipboardList, Users, Play, Settings as SettingsIcon, Warehouse, LogOut, FileText, ShoppingCart, Package, ListTodo, TruckIcon, ChevronDown, ChevronRight, Headphones } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { useState } from 'react';
@@ -203,6 +203,17 @@ export function Sidebar({ activeModule, setActiveModule, openRequestsCount = 0, 
         )}
       </nav>
       
+      <div className="p-4 border-t border-slate-200">
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent hover:border-slate-200"
+          onClick={() => setActiveModule('support')}
+        >
+          <Headphones className="w-4 h-4" />
+          Support
+        </Button>
+      </div>
+
       {crisisTeam && (
         <div className="p-4 border-t border-slate-200">
           <p className="text-xs text-slate-500 mb-2">Aktiver Krisenstab</p>

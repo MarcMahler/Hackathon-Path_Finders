@@ -1,17 +1,30 @@
-# Hackathon Pathfinders
-## Members
+# Resilio - Crisis Management System
+
+## Members of the Pathfinders
 - Marc Mahler, 23-726-276
 - Janosch Beck
 - Jarno Bucher
 
 ## Challenge Description
-empty
+Develop a crisis management application that enables efficient coordination and resource management during emergency situations. The challenge requires creating a system that supports different user roles, inventory management, and real-time communication between crisis response teams.
 
 ## Solution Description
-empty
+**Resilio** is a comprehensive crisis management platform that streamlines emergency response through:
+
+- **Role-based Access Control**: Supports Chairman, Employee, and Warehouse Management roles with tailored interfaces
+- **Inventory Management**: Real-time tracking of emergency supplies with detailed product information and setup guides
+- **Request System**: Streamlined approval workflow for emergency resource requests
+- **Crisis Team Coordination**: Centralized team management with member assignments and responsibilities
+- **Warehouse Operations**: Multi-location inventory tracking with maintenance scheduling
+
+The system features a clean, intuitive interface optimized for high-stress situations with quick access to critical information and emergency contacts.
 
 ## Tech Stack
-empty
+- **Frontend**: React + TypeScript, Vite, Tailwind CSS
+- **UI Components**: shadcn/ui, Lucide React icons
+- **Routing**: Client-side navigation with context management
+- **State Management**: React Context API with localStorage persistence
+- **Backend** Node
 
 
 ---

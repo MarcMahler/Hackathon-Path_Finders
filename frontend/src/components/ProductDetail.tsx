@@ -2,7 +2,7 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Label } from './ui/label';
-import { ArrowLeft, Package, MapPin, Clock, AlertCircle, CheckCircle, AlertTriangle, Bed, Droplet, Utensils, Armchair, ShoppingCart } from 'lucide-react';
+import { ArrowLeft, Package, MapPin, Clock, AlertCircle, CheckCircle, AlertTriangle, Bed, Droplet, Utensils, Armchair, ShoppingCart, FileText, ExternalLink } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
 import { Input } from './ui/input';
@@ -43,6 +43,12 @@ const productDetails: Record<string, {
     inspector: string;
     condition: string;
   };
+  setupGuide?: {
+    available: boolean;
+    title: string;
+    description: string;
+    pdfUrl: string;
+  };
 }> = {
   'Feldbetten': {
     description: 'Robuste Feldbetten für Notunterkünfte. Klappbar und leicht transportierbar. Geeignet für Erwachsene bis 120kg Körpergewicht.',
@@ -64,6 +70,12 @@ const productDetails: Record<string, {
       date: '15. Oktober 2025',
       inspector: 'M. Schmidt (Zivilschutz)',
       condition: 'Einwandfrei - alle Betten funktionsfähig',
+    },
+    setupGuide: {
+      available: true,
+      title: 'Aufbauanleitung Feldbetten',
+      description: 'Schritt-für-Schritt Anleitung zum sicheren Aufbau der Feldbetten. Enthält Sicherheitshinweise und Wartungstipps.',
+      pdfUrl: '/guides/feldbetten-aufbau.pdf',
     },
   },
   'Schlafsäcke': {
@@ -594,27 +606,86 @@ export function ProductDetail({ item, onBack, onProductSelect, onAddToCart }: Pr
           </div>
         </Card>
 
-        {/* Letzte Inspektion */}
-        <Card className="lg:col-span-3 p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock className="w-5 h-5 text-slate-500" />
-            <h2>Letzte Inspektion</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <Label className="text-slate-600">Datum</Label>
-              <p className="text-slate-900">{details.lastInspection.date}</p>
+        {/* Letzte Inspektion & Setup Guide */}
+        {details.setupGuide?.available ? (
+          // Split view: Inspection + Setup Guide
+          <>
+            <Card className="lg:col-span-1 lg:col-start-1 p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Clock className="w-5 h-5 text-slate-500" />
+                <h2>Letzte Inspektion</h2>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <Label className="text-slate-600">Datum</Label>
+                  <p className="text-slate-900">{details.lastInspection.date}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-600">Prüfer</Label>
+                  <p className="text-slate-900">{details.lastInspection.inspector}</p>
+                </div>
+                <div>
+                  <Label className="text-slate-600">Zustand</Label>
+                  <p className="text-slate-900">{details.lastInspection.condition}</p>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="lg:col-span-2 p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <FileText className="w-5 h-5 text-slate-500" />
+                <h2>Aufbauanleitung</h2>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg text-slate-900 mb-2">{details.setupGuide.title}</h3>
+                  <p className="text-slate-700 mb-4">{details.setupGuide.description}</p>
+                </div>
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <FileText className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-blue-900 font-medium">PDF-Anleitung verfügbar</p>
+                      <p className="text-blue-700 text-sm">Vollständige Schritt-für-Schritt Anleitung zum Download</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="border-blue-500 text-blue-600 hover:bg-blue-50"
+                      onClick={() => window.open(details.setupGuide!.pdfUrl, '_blank')}
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      PDF öffnen
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </>
+        ) : (
+          // Full-width inspection card (no guide available)
+          <Card className="lg:col-span-3 p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Clock className="w-5 h-5 text-slate-500" />
+              <h2>Letzte Inspektion</h2>
             </div>
-            <div>
-              <Label className="text-slate-600">Prüfer</Label>
-              <p className="text-slate-900">{details.lastInspection.inspector}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <Label className="text-slate-600">Datum</Label>
+                <p className="text-slate-900">{details.lastInspection.date}</p>
+              </div>
+              <div>
+                <Label className="text-slate-600">Prüfer</Label>
+                <p className="text-slate-900">{details.lastInspection.inspector}</p>
+              </div>
+              <div>
+                <Label className="text-slate-600">Zustand</Label>
+                <p className="text-slate-900">{details.lastInspection.condition}</p>
+              </div>
             </div>
-            <div>
-              <Label className="text-slate-600">Zustand</Label>
-              <p className="text-slate-900">{details.lastInspection.condition}</p>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (
