@@ -2,8 +2,24 @@
 
 ## Members of the Pathfinders
 - Marc Mahler, 23-726-276
-- Janosch Beck
-- Jarno Bucher
+- Janosch Beck, 23-731-011
+- Jarno Bucher, 23-700-115
+
+## Task distribution:
+#### Marc 
+- Team Leader
+- Concept designer
+- Stakeholder Analyst
+- Figma Make specialist, handling the Frontend design with the modern tool Figma Make
+- **Report:** Analysis (Evaluation of the final solution, Critical Incidents Analysis, Impact on the team), Reflection, Conclusion
+
+#### Janosch Beck
+- Screen for the Crisis Magament Staff Leader
+- Set up infrastructure for BE and some sample Endpoints
+- **Report:** ProblemStatement and Motivation, Solution design & fit to the GaaP concept, Approach
+  
+#### Jarno
+  
 
 ## Challenge Description
 Develop a crisis management application that enables efficient coordination and resource management during emergency situations. The challenge requires creating a system that supports different user roles, inventory management, and real-time communication between crisis response teams.
