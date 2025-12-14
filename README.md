@@ -1,5 +1,5 @@
 # Resilio - Crisis Management System
-link to our official pitch: [link](https://uzh.sharepoint.com/sites/SeminarDigitalPlatformsforResilienceinCrisisBScMSc/_layouts/15/stream.aspx?id=%2Fsites%2FSeminarDigitalPlatformsforResilienceinCrisisBScMSc%2FShared%20Documents%2FGeneral%2FHackathon%2FPresentation%20videos%2FTeam2%5FAOZ%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ebb305074%2Dcd85%2D47aa%2D98b7%2Dc6b91c69f1b5)
+[link to our official pitch](https://uzh.sharepoint.com/sites/SeminarDigitalPlatformsforResilienceinCrisisBScMSc/_layouts/15/stream.aspx?id=%2Fsites%2FSeminarDigitalPlatformsforResilienceinCrisisBScMSc%2FShared%20Documents%2FGeneral%2FHackathon%2FPresentation%20videos%2FTeam2%5FAOZ%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ebb305074%2Dcd85%2D47aa%2D98b7%2Dc6b91c69f1b5)
 
 ## Members of the Pathfinders
 - Marc Mahler, 23-726-276
@@ -37,9 +37,9 @@ Our team developed Resilio, a concept for a centralized crisis management platfo
 Resilio enables crisis teams to gain a clear overview of available goods and resources across the city, request what they need quickly, and make informed decisions without relying on fragmented knowledge.
 
 The platform is built around three clearly defined user roles:
-	•	Crisis Management Staff – view and request available items such as beds, blankets, or supplies. The interface focuses on simplicity and ensures users can find and request items in just a few clicks.
-	•	Crisis Management Lead – reviews and prioritizes incoming requests, ensuring resources are distributed fairly and efficiently across all departments.
-	•	Maintainers – manage inventory data and update storage information, ensuring that all shared resources remain visible and reliable for everyone involved.
+- Crisis Management Staff – view and request available items such as beds, blankets, or supplies. The interface focuses on simplicity and ensures users can find and request items in just a few clicks.
+- Crisis Management Lead – reviews and prioritizes incoming requests, ensuring resources are distributed fairly and efficiently across all departments.
+- Maintainers – manage inventory data and update storage information, ensuring that all shared resources remain visible and reliable for everyone involved.
 
 Resilio’s goal is to make crisis response more transparent, efficient, and collaborative.
 By providing one shared space for all critical information, the system reduces stress, minimizes redundant work, and allows the City of Zurich to act faster and smarter when it matters most.
