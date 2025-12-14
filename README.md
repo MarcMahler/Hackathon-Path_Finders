@@ -46,8 +46,17 @@ By providing one shared space for all critical information, the system reduces s
 The system features a clean, intuitive interface optimized for high-stress situations with quick access to critical information and emergency contacts.
 
 ## Tech Stack
-- **Frontend**: React + TypeScript, Vite
-- **UI Components**: shadcn/ui, Lucide React icons
-- **Routing**: Client-side navigation with context management
-- **State Management**: React Context API with localStorage persistence
-- **Backend** Node
+- Frontend
+  - React (v18) — react, react-dom
+  - Vite
+  - Icons: lucide-react
+  - Theming: next-themes
+- State / Routing
+  - client-side with vite
+- Backend
+  - Node.js mit Express (express) und CORS (cors)
+  - Einstiegspunkt: server.js (Scripts: start/dev
+- Package Manager / Scripts
+  - npm (package.json in frontend und backend)
+  - Frontend-Scripts: dev (vite), build (vite build)
+  - Backend-Scripts: start / dev (node server.js)
