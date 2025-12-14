@@ -1,4 +1,5 @@
 # Resilio - Crisis Management System
+link to our official pitch: [link](https://uzh.sharepoint.com/sites/SeminarDigitalPlatformsforResilienceinCrisisBScMSc/_layouts/15/stream.aspx?id=%2Fsites%2FSeminarDigitalPlatformsforResilienceinCrisisBScMSc%2FShared%20Documents%2FGeneral%2FHackathon%2FPresentation%20videos%2FTeam2%5FAOZ%2Emp4&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D&referrer=StreamWebApp%2EWeb&referrerScenario=AddressBarCopied%2Eview%2Ebb305074%2Dcd85%2D47aa%2D98b7%2Dc6b91c69f1b5)
 
 ## Members of the Pathfinders
 - Marc Mahler, 23-726-276
@@ -55,7 +56,7 @@ The system features a clean, intuitive interface optimized for high-stress situa
   - client-side with vite
 - Backend
   - Node.js mit Express (express) und CORS (cors)
-  - Einstiegspunkt: server.js (Scripts: start/dev
+  - Einstiegspunkt: server.js (Scripts: start/dev)
 - Package Manager / Scripts
   - npm (package.json in frontend und backend)
   - Frontend-Scripts: dev (vite), build (vite build)
