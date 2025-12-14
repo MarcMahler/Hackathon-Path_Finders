@@ -47,7 +47,7 @@ The system features a clean, intuitive interface optimized for high-stress situa
 
 ## Tech Stack
 - Frontend
-  - React (v18) — react, react-dom
+  - React (v18)
   - Vite
   - Icons: lucide-react
   - Theming: next-themes
