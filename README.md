@@ -20,7 +20,7 @@ Develop a crisis management application that enables efficient coordination and 
 The system features a clean, intuitive interface optimized for high-stress situations with quick access to critical information and emergency contacts.
 
 ## Tech Stack
-- **Frontend**: React + TypeScript, Vite, Tailwind CSS
+- **Frontend**: React + TypeScript, Vite
 - **UI Components**: shadcn/ui, Lucide React icons
 - **Routing**: Client-side navigation with context management
 - **State Management**: React Context API with localStorage persistence
